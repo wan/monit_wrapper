@@ -17,7 +17,7 @@ maintainer       'ClearStory Data, Inc.'
 maintainer_email 'mbautin@clearstorydata.com'
 license          'Apache License 2.0'
 description      'A wrapper around Monit making it easier to monitor services'
-version          '2.3.2'
+version          '2.4.0'
 
 %w( debian ubuntu ).each do |os|
   supports os
