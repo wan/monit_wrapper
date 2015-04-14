@@ -13,7 +13,6 @@
 # limitations under the License.
 
 source 'https://rubygems.org'
-source 'http://gems.clearstorydatainc.com'
 
 gem 'chef', '>= 11.18.6'
 gem 'berkshelf', '~> 3.2'
