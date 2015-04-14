@@ -13,6 +13,11 @@ cd monit_wrapper
 git checkout gh-pages
 rm -rf ./*
 cp -R ../../doc/* .
+
+find . -name "*.html" -exec sed -i -s 's/"_index.html"/"index.html"/g' {} \;
+find . -name "*.html" -exec sed -i -s 's/\/_index.html/\/index.html/g' {} \;
+find . -name "*.html" -exec sed -i -s 's/#!_index.html/#!index.html/g' {} \;
+
 git add -A
 git commit -a -m "Updating documentation (user: $USER, timestamp: `date`)"
 git push origin
