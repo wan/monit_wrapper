@@ -31,7 +31,7 @@
     <div id="header">
       <div id="menu">
   
-    <a href="../_index.html">Index (m)</a> &raquo;
+    <a href="../index.html">Index (m)</a> &raquo;
     <span class='title'><span class='object_link'><a href="../chef.html" title="chef (chef)">chef</a></span></span>
      &raquo; 
     <span class="title">monit_wrapper</span>
@@ -79,7 +79,7 @@
   <h1>Cookbook : monit_wrapper</h1>
   
 
-<h1>monit-wrapper</h1>
+<h1>monit_wrapper</h1>
 
 <p><a href="https://travis-ci.org/clearstorydata-cookbooks/monit_wrapper"><img src="https://travis-ci.org/clearstorydata-cookbooks/monit_wrapper.svg?branch=master" alt="Build Status"></a></p>
 
@@ -92,9 +92,11 @@
 <li>Documentation: <a href="http://clearstorydata-cookbooks.github.io/monit_wrapper/chef/monit_wrapper.html">http://clearstorydata-cookbooks.github.io/monit_wrapper/chef/monit_wrapper.html</a></li>
 </ul>
 
-<h2>Example</h2>
+<h2>Examples</h2>
 
-<p>In <code>my_cookbook/templates/default/monit/my_service.conf.erb</code>:</p>
+<h3>Custom Monit configuration template</h3>
+
+<p>Create a configuration template in your cookbook <code>my_cookbook/templates/default/monit/my_service.conf.erb</code>:</p>
 
 <pre class="code ruby"><code class="ruby">check process &lt;%= @service_name %&gt;
   matching &#39;&lt;%= @cmd_line_pattern %&gt;&#39;
@@ -126,6 +128,30 @@
   <span class='id identifier rubyid_subscribes'>subscribes</span> <span class='symbol'>:restart</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit-wrapper_notify_if_not_running[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_my_service_name'>my_service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:delayed</span>
   <span class='id identifier rubyid_subscribes'>subscribes</span> <span class='symbol'>:restart</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>package[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_my_service_name'>my_service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:delayed</span>
 <span class='kw'>end</span>
+</code></pre>
+
+<h3>Launching and monitoring a process with an existing init</h3>
+
+<p>If you have a service with an existing <code>/etc/init.d</code> script, you can use this cookbook to create
+a Monit configuration file to monitor that service. This makes use of the <a href="https://github.com/clearstorydata-cookbooks/monit_wrapper/blob/master/templates/default/service_wrapper.monitrc.erb">default Monit
+configuration template</a>
+this cookbook provides.</p>
+
+<pre class="code ruby"><code class="ruby">my_sevice_name = &#39;my-service&#39;
+
+monit_wrapper_monitor my_service_name do
+  action :create
+  pattern &#39;...&#39;
+end
+
+monit_wrapper_notify_if_not_running my_service_name do
+
+monit_wrapper_service service_name do
+  subscribes :restart, &quot;package[#{service_name}]&quot;, :delayed
+  subscribes :restart, &quot;monit-wrapper_monitor[#{service_name}]&quot;, :delayed
+  subscribes :restart, &quot;monit-wrapper_notify_if_not_running[#{service_name}]&quot;,
+             :delayed
+end
 </code></pre>
 
 <h2>License</h2>
@@ -908,7 +934,7 @@ running.</td>
       <span class='id identifier rubyid_group'>group</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>root</span><span class='tstring_end'>&#39;</span></span>
       <span class='id identifier rubyid_mode'>mode</span>  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0644</span><span class='tstring_end'>&#39;</span></span>
       <span class='id identifier rubyid_source'>source</span> <span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_template_source'>template_source</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>service_wrapper.monitrc.erb</span><span class='tstring_end'>&#39;</span></span>
-      <span class='id identifier rubyid_cookbook'>cookbook</span> <span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_template_cookbook'>template_cookbook</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit-wrapper</span><span class='tstring_end'>&#39;</span></span>
+      <span class='id identifier rubyid_cookbook'>cookbook</span> <span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_template_cookbook'>template_cookbook</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit_wrapper</span><span class='tstring_end'>&#39;</span></span>
       <span class='id identifier rubyid_variables'>variables</span> <span class='id identifier rubyid_variables'>variables</span>
       <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:create</span>
     <span class='kw'>end</span>
@@ -1124,7 +1150,7 @@ running.</td>
 </div>
 
     <div id="footer">
-  Generated on Mon Apr 13 18:46:59 2015 by
+  Generated on Mon Apr 13 19:23:00 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.1.5).
 </div>
