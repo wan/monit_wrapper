@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name             'monit-wrapper'
+name             'monit_wrapper'
 maintainer       'ClearStory Data, Inc.'
 maintainer_email 'mbautin@clearstorydata.com'
 license          'Apache License 2.0'
