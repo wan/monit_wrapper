@@ -9,9 +9,11 @@ This cookbook simplifies setting up services using Monit.
 * Travis CI: https://travis-ci.org/clearstorydata-cookbooks/monit_wrapper
 * Documentation: http://clearstorydata-cookbooks.github.io/monit_wrapper/chef/monit_wrapper.html
 
-## Example
+## Examples
 
-In `my_cookbook/templates/default/monit/my_service.conf.erb`:
+### Custom Monit configuration template
+
+Create a configuration template in your cookbook `my_cookbook/templates/default/monit/my_service.conf.erb`:
 
 ```ruby
 check process <%= @service_name %>
@@ -44,6 +46,31 @@ monit_wrapper_service my_service_name do
   subscribes :restart, "monit-wrapper_monitor[#{my_service_name}]", :delayed
   subscribes :restart, "monit-wrapper_notify_if_not_running[#{my_service_name}]", :delayed
   subscribes :restart, "package[#{my_service_name}]", :delayed
+end
+```
+
+### Launching and monitoring a process with a `/etc/init.d` script
+
+If you have a service with an existing `/etc/init.d` script, you can use this cookbook to create
+a Monit configuration file to monitor that service. This makes use of the [default template]
+(https://github.com/clearstorydata-cookbooks/monit_wrapper/blob/master/templates/default/service_wrapper.monitrc.erb)
+
+
+```ruby
+my_sevice_name = 'my-service'
+
+monit_wrapper_monitor my_service_name do
+  action :create
+  pattern '...'
+end
+
+monit_wrapper_notify_if_not_running my_service_name do
+
+monit_wrapper_service service_name do
+  subscribes :restart, "package[#{service_name}]", :delayed
+  subscribes :restart, "monit-wrapper_monitor[#{service_name}]", :delayed
+  subscribes :restart, "monit-wrapper_notify_if_not_running[#{service_name}]",
+             :delayed
 end
 ```
 

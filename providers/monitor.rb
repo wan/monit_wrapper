@@ -51,7 +51,7 @@ action :create do  # ~FC017
       group 'root'
       mode  '0644'
       source new_resource.template_source || 'service_wrapper.monitrc.erb'
-      cookbook new_resource.template_cookbook || 'monit-wrapper'
+      cookbook new_resource.template_cookbook || 'monit_wrapper'
       variables variables
       action :create
     end
