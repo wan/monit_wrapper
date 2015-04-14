@@ -31,20 +31,21 @@ case "${cmd}" in
 esac
 
 (
-echo "${message}"
-set -x
-lock_file=/var/monit/${service_name}-start-stop.lock
-time -p flock --timeout <%= @timeout_sec %> "${lock_file}" /usr/sbin/service "${service_name}" "${cmd}"
-exit_code=$?
-set +x
-rm -f "${lock_file}"
-if [ "${exit_code}" -ne 0 ]; then
-  echo "${cmd} operation failed for service ${service_name} with code ${exit_code}"
-  exit ${exit_code}
-else
-  echo "${cmd} operation successful for service ${service_name}"
-fi
-) 2>&1 | tee -a /var/log/monit.log
+  echo "${message}"
+  set -x
+  lock_file=/var/monit/${service_name}-start-stop.lock
+  time -p \
+    flock --timeout <%= @timeout_sec %> "${lock_file}" /usr/sbin/service "${service_name}" "${cmd}"
+  exit_code=$?
+  set +x
+  rm -f "${lock_file}"
+  if [ "${exit_code}" -ne 0 ]; then
+    echo "${cmd} operation failed for service ${service_name} with code ${exit_code}"
+    exit ${exit_code}
+  else
+    echo "${cmd} operation successful for service ${service_name}"
+  fi
+) 2>&1 | tee -a /var/log/start-stop-services.log
 
-# Use the exit code of the flock command (i.e. of /usr/sbin/service), not the logger command.
+# Use the exit code of the flock command (i.e. of /usr/sbin/service), not the tee command.
 exit ${PIPESTATUS[0]}

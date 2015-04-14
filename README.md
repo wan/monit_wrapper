@@ -49,12 +49,12 @@ monit_wrapper_service my_service_name do
 end
 ```
 
-### Launching and monitoring a process with a `/etc/init.d` script
+### Launching and monitoring a process with an existing init
 
 If you have a service with an existing `/etc/init.d` script, you can use this cookbook to create
-a Monit configuration file to monitor that service. This makes use of the [default template]
-(https://github.com/clearstorydata-cookbooks/monit_wrapper/blob/master/templates/default/service_wrapper.monitrc.erb)
-
+a Monit configuration file to monitor that service. This makes use of the [default Monit
+configuration template] (https://github.com/clearstorydata-cookbooks/monit_wrapper/blob/master/templates/default/service_wrapper.monitrc.erb)
+this cookbook provides.
 
 ```ruby
 my_sevice_name = 'my-service'
