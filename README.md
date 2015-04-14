@@ -1,5 +1,4 @@
-# monit-wrapper
-
+# monit_wrapper
 
 [![Build Status](https://travis-ci.org/clearstorydata-cookbooks/monit_wrapper.svg?branch=master)](https://travis-ci.org/clearstorydata-cookbooks/monit_wrapper)
 
