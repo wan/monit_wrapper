@@ -8,6 +8,7 @@ This cookbook simplifies setting up services using Monit.
 * GitHub: https://github.com/clearstorydata-cookbooks/monit_wrapper
 * Chef Supermarket: https://supermarket.chef.io/cookbooks/monit_wrapper
 * Travis CI: https://travis-ci.org/clearstorydata-cookbooks/monit_wrapper
+* Documentation: http://clearstorydata-cookbooks.github.io/monit_wrapper/chef/monit_wrapper.html
 
 ## Example
 
