@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name 'monit-wrapper-test'
+name 'monit_wrapper_test'
 maintainer 'No One'
 maintainer_email 'fake@fake.com'
 license 'Apache 2.0'
-description 'A sample cookbook for testing monit-wrapper LWRPs'
-long_description 'A sample cookbook for testing monit-wrapper LWRPs'
+description 'A sample cookbook for testing monit_wrapper LWRPs'
+long_description 'A sample cookbook for testing monit_wrapper LWRPs'
 version '0.1.0'
 
-depends 'monit-wrapper'
+depends 'monit_wrapper'

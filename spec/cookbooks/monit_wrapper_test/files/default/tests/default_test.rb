@@ -31,14 +31,14 @@ module MonitWrapperSpecHelpers
   end
 end
 
-# A minitest test for the monit-wrapper cookbook.
+# A minitest test for the monit_wrapper cookbook.
 class MonitWrapperSpec < MiniTest::Chef::Spec
   include MiniTest::Chef::Resources
   include MiniTest::Chef::Assertions
   include Chef::MonitWrapper::Status
   include MonitWrapperSpecHelpers
 
-  describe_recipe 'monit-wrapper-test::default' do
+  describe_recipe 'monit_wrapper_test::default' do
 
     it 'creates the myuser user' do
       user('myuser').must_exist

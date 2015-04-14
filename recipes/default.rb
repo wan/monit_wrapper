@@ -19,14 +19,12 @@ bash 'start-monit' do
   code '/etc/init.d/monit start'
 end
 
-chef_gem 'waitutil' do
-  version '0.2.1'
-end
+chef_gem 'waitutil'
 
 template '/usr/local/bin/start_stop_service_from_monit.sh' do
   source 'start_stop_service_from_monit.sh.erb'
   owner 'root'
   group 'root'
   mode '0744'
-  variables :timeout_sec => node['monit-wrapper']['start_stop_timeout_sec']
+  variables timeout_sec: node['monit_wrapper']['start_stop_timeout_sec']
 end

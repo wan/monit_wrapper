@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-default['monit-wrapper']['start_stop_timeout_sec'] = 10
+default['monit_wrapper']['start_stop_timeout_sec'] = 10
