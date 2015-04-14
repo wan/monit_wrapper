@@ -1,6 +1,13 @@
 # monit-wrapper
 
+
+[![Build Status](https://travis-ci.org/clearstorydata-cookbooks/monit_wrapper.svg?branch=master)](https://travis-ci.org/clearstorydata-cookbooks/monit_wrapper)
+
 This cookbook simplifies setting up services using Monit.
+
+* GitHub: https://github.com/clearstorydata-cookbooks/monit_wrapper
+* Chef Supermarket: https://supermarket.chef.io/cookbooks/monit_wrapper
+* Travis CI: https://travis-ci.org/clearstorydata-cookbooks/monit_wrapper
 
 ## Example
 
