@@ -43,8 +43,8 @@ end
 monit_wrapper_notify_if_not_running monit_service_name
 
 monit_wrapper_service my_service_name do
-  subscribes :restart, "monit-wrapper_monitor[#{my_service_name}]", :delayed
-  subscribes :restart, "monit-wrapper_notify_if_not_running[#{my_service_name}]", :delayed
+  subscribes :restart, "monit_wrapper_monitor[#{my_service_name}]", :delayed
+  subscribes :restart, "monit_wrapper_notify_if_not_running[#{my_service_name}]", :delayed
   subscribes :restart, "package[#{my_service_name}]", :delayed
 end
 ```
@@ -68,8 +68,8 @@ monit_wrapper_notify_if_not_running my_service_name do
 
 monit_wrapper_service service_name do
   subscribes :restart, "package[#{service_name}]", :delayed
-  subscribes :restart, "monit-wrapper_monitor[#{service_name}]", :delayed
-  subscribes :restart, "monit-wrapper_notify_if_not_running[#{service_name}]",
+  subscribes :restart, "monit_wrapper_monitor[#{service_name}]", :delayed
+  subscribes :restart, "monit_wrapper_notify_if_not_running[#{service_name}]",
              :delayed
 end
 ```

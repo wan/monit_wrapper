@@ -17,7 +17,7 @@ maintainer       'ClearStory Data, Inc.'
 maintainer_email 'mbautin@clearstorydata.com'
 license          'Apache License 2.0'
 description      'A wrapper around Monit making it easier to monitor services'
-version          '2.4.4'
+version          '2.4.5'
 source_url       'https://github.com/clearstorydata-cookbooks/monit_wrapper'
 
 %w( debian ubuntu ).each do |os|

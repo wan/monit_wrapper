@@ -23,7 +23,7 @@ platforms:
 suites:
 - name: testkitchen-monit-wrapper
   run_list:
-  - recipe[monit-wrapper-test]
+  - recipe[monit_wrapper_test]
   - recipe[minitest-handler]
   attributes:
     monit:
