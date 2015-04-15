@@ -124,8 +124,8 @@
 <span class='id identifier rubyid_monit_wrapper_notify_if_not_running'>monit_wrapper_notify_if_not_running</span> <span class='id identifier rubyid_monit_service_name'>monit_service_name</span>
 
 <span class='id identifier rubyid_monit_wrapper_service'>monit_wrapper_service</span> <span class='id identifier rubyid_my_service_name'>my_service_name</span> <span class='kw'>do</span>
-  <span class='id identifier rubyid_subscribes'>subscribes</span> <span class='symbol'>:restart</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit-wrapper_monitor[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_my_service_name'>my_service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:delayed</span>
-  <span class='id identifier rubyid_subscribes'>subscribes</span> <span class='symbol'>:restart</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit-wrapper_notify_if_not_running[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_my_service_name'>my_service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:delayed</span>
+  <span class='id identifier rubyid_subscribes'>subscribes</span> <span class='symbol'>:restart</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit_wrapper_monitor[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_my_service_name'>my_service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:delayed</span>
+  <span class='id identifier rubyid_subscribes'>subscribes</span> <span class='symbol'>:restart</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit_wrapper_notify_if_not_running[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_my_service_name'>my_service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:delayed</span>
   <span class='id identifier rubyid_subscribes'>subscribes</span> <span class='symbol'>:restart</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>package[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_my_service_name'>my_service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:delayed</span>
 <span class='kw'>end</span>
 </code></pre>
@@ -148,8 +148,8 @@ monit_wrapper_notify_if_not_running my_service_name do
 
 monit_wrapper_service service_name do
   subscribes :restart, &quot;package[#{service_name}]&quot;, :delayed
-  subscribes :restart, &quot;monit-wrapper_monitor[#{service_name}]&quot;, :delayed
-  subscribes :restart, &quot;monit-wrapper_notify_if_not_running[#{service_name}]&quot;,
+  subscribes :restart, &quot;monit_wrapper_monitor[#{service_name}]&quot;, :delayed
+  subscribes :restart, &quot;monit_wrapper_notify_if_not_running[#{service_name}]&quot;,
              :delayed
 end
 </code></pre>
@@ -1146,7 +1146,7 @@ running.</td>
 </div>
 
     <div id="footer">
-  Generated on Mon Apr 13 19:47:48 2015 by
+  Generated on Wed Apr 15 11:33:44 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.1.5).
 </div>
