@@ -21,7 +21,7 @@ platforms:
 - name: ubuntu-12.04
 
 suites:
-- name: testkitchen-monit-wrapper
+- name: testkitchen_monit_wrapper
   run_list:
   - recipe[monit_wrapper_test]
   - recipe[minitest-handler]
