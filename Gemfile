@@ -16,6 +16,7 @@ source 'https://rubygems.org'
 
 gem 'chef', '>= 11.18.6'
 gem 'berkshelf', '~> 3.2'
+gem 'stove', '~> 3.2'
 
 group :test do
   gem 'chefspec', '~> 4.2'
