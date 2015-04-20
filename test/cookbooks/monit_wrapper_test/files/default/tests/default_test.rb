@@ -21,11 +21,11 @@ module MonitWrapperSpecHelpers
   DELAY_AFTER_MONIT_CMD_SEC = 0.5
 
   def stop_start_service
-    shell_out!('monit stop myservice')
+    stop_monit_service('myservice')
     sleep(DELAY_AFTER_MONIT_CMD_SEC)
     assert_equal('Not monitored', get_stable_monit_service_status('myservice'))
 
-    shell_out!('monit start myservice')
+    start_monit_service('myservice')
     sleep(DELAY_AFTER_MONIT_CMD_SEC)
     assert_equal('Running', get_stable_monit_service_status('myservice'))
   end
@@ -36,7 +36,10 @@ class MonitWrapperSpec < MiniTest::Chef::Spec
   include MiniTest::Chef::Resources
   include MiniTest::Chef::Assertions
   include Chef::MonitWrapper::Status
+  include Chef::MonitWrapper::StartStop
+
   include MonitWrapperSpecHelpers
+
 
   describe_recipe 'monit_wrapper_test::default' do
 
@@ -65,6 +68,34 @@ class MonitWrapperSpec < MiniTest::Chef::Spec
 
       file('/var/log/myservice/myservice.out').must_exist
       file('/var/log/myservice/myservice.err').must_exist
+    end
+
+    it 'stop_monit_service, start_monit_service' do
+      stop_monit_service('myservice')
+      assert_equal('Not monitored', get_stable_monit_service_status('myservice'))
+      start_monit_service('myservice')
+      assert_equal('Running', get_stable_monit_service_status('myservice'))
+    end
+
+    it 'start_monit_service, stop_monit_service' do
+      start_monit_service('myservice')
+      assert_equal('Running', get_stable_monit_service_status('myservice'))
+      stop_monit_service('myservice')
+      assert_equal('Not monitored', get_stable_monit_service_status('myservice'))
+    end
+
+    it 'restart_monit_service for a service that is initially not running' do
+      stop_monit_service('myservice')
+      assert_equal('Not monitored', get_stable_monit_service_status('myservice'))
+      restart_monit_service('myservice')
+      assert_equal('Running', get_stable_monit_service_status('myservice'))
+    end
+
+    it 'restart_monit_service for a service that is initially running' do
+      start_monit_service('myservice')
+      assert_equal('Running', get_stable_monit_service_status('myservice'))
+      restart_monit_service('myservice')
+      assert_equal('Running', get_stable_monit_service_status('myservice'))
     end
 
   end

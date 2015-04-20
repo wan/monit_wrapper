@@ -13,13 +13,15 @@
 # limitations under the License.
 
 require 'chef/mixin/shell_out'
-include Chef::Mixin::ShellOut
 
 class Chef
   module MonitWrapper
     # Tools to detect service status from Monit's `summary` command output. Methods in this module
     # are automatically available in resources and providers.
     module Status
+
+      include Chef::Mixin::ShellOut
+
       # Parses the output of the `monit summary` command.
       #
       # @return [Hash] a mapping from service names to their statuses.
