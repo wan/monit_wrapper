@@ -24,6 +24,15 @@ class Chef
 
       DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC = 60
 
+      # Starts the given Monit service. Waits for the service status to stabilize before and after
+      # issuing the start command. If a host/port combination is specified, waits for the given host
+      # to start listening on the given TCP port before returning.
+      #
+      # @param service_name [String] service name
+      # @param host [String] (optional) host to wait for
+      # @param port [Integer] (optional) TCP port number to wait for
+      # @param timeout_sec [Integer] (optional) the maximum number of seconds to wait for the given
+      #   host/port combination to become available.
       def start_monit_service(
           service_name,
           host: 'localhost',
@@ -48,12 +57,23 @@ class Chef
         end
       end
 
+      # Stops the given Monit service. Waits for the service status to stabilize before and after
+      # issuing the stop command.
       def stop_monit_service(service_name)
         get_stable_monit_service_status(service_name)
         shell_out!("monit stop #{service_name}")
         get_stable_monit_service_status(service_name)
       end
 
+      # Restarts the given Monit service. Waits for the service status to stabilize before and after
+      # issuing the restart command. If a host/port combination is specified, waits for the given
+      # host to start listening on the given TCP port before returning.
+      #
+      # @param service_name [String] service name
+      # @param host [String] (optional) host to wait for
+      # @param port [Integer] (optional) TCP port number to wait for
+      # @param timeout_sec [Integer] (optional) the maximum number of seconds to wait for the given
+      #   host/port combination to become available.
       def restart_monit_service(
           service_name,
           host: 'localhost',
