@@ -2,7 +2,7 @@
 set -eux
 cd `dirname $0`
 bundle install
-bundle rspec
+bundle exec rspec
 git pull --rebase origin master
 git push origin master
 bundle exec stove
