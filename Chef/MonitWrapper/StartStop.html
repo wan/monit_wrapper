@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Chef::MonitWrapper::StartStop
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../../';
+  framesUrl = "../../frames.html#!Chef/MonitWrapper/StartStop.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../index.html">Index (S)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../Chef.html" title="Chef (class)">Chef</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../MonitWrapper.html" title="Chef::MonitWrapper (module)">MonitWrapper</a></span></span>
+     &raquo; 
+    <span class="title">StartStop</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="cookbooks_list_link"
+        href="../../cookbooks_list.html">
+      Cookbook List
+    </a>
+  
+    <a class="full_list_link" id="recipes_list_link"
+        href="../../recipes_list.html">
+      Recipe List
+    </a>
+  
+    <a class="full_list_link" id="resources_list_link"
+        href="../../resources_list.html">
+      Resource List
+    </a>
+  
+    <a class="full_list_link" id="definitions_list_link"
+        href="../../definitions_list.html">
+      Definitions List
+    </a>
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+      Libraries List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: Chef::MonitWrapper::StartStop
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+      <dt class="r1">Includes:</dt>
+      <dd class="r1">Chef::Mixin::ShellOut, <span class='object_link'><a href="Status.html" title="Chef::MonitWrapper::Status (module)">Status</a></span></dd>
+      
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">libraries/start_stop.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC-constant" class="">DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>60</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#restart_monit_service-instance_method" title="#restart_monit_service (instance method)">- (Object) <strong>restart_monit_service</strong>(service_name, host: &#39;localhost&#39;, port: nil, timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#start_monit_service-instance_method" title="#start_monit_service (instance method)">- (Object) <strong>start_monit_service</strong>(service_name, host: &#39;localhost&#39;, port: nil, timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#stop_monit_service-instance_method" title="#stop_monit_service (instance method)">- (Object) <strong>stop_monit_service</strong>(service_name) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Status.html" title="Chef::MonitWrapper::Status (module)">Status</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Status.html#get_monit_summary-instance_method" title="Chef::MonitWrapper::Status#get_monit_summary (method)">#get_monit_summary</a></span>, <span class='object_link'><a href="Status.html#get_stable_monit_service_status-instance_method" title="Chef::MonitWrapper::Status#get_stable_monit_service_status (method)">#get_stable_monit_service_status</a></span>, <span class='object_link'><a href="Status.html#monit_service_exists_and_running%3F-instance_method" title="Chef::MonitWrapper::Status#monit_service_exists_and_running? (method)">#monit_service_exists_and_running?</a></span>, <span class='object_link'><a href="Status.html#monit_service_registered%3F-instance_method" title="Chef::MonitWrapper::Status#monit_service_registered? (method)">#monit_service_registered?</a></span>, <span class='object_link'><a href="Status.html#monit_service_running%3F-instance_method" title="Chef::MonitWrapper::Status#monit_service_running? (method)">#monit_service_running?</a></span>, <span class='object_link'><a href="Status.html#monit_status_stable%3F-instance_method" title="Chef::MonitWrapper::Status#monit_status_stable? (method)">#monit_status_stable?</a></span>, <span class='object_link'><a href="Status.html#parse_monit_summary-instance_method" title="Chef::MonitWrapper::Status#parse_monit_summary (method)">#parse_monit_summary</a></span></p>
+
+  
+  
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="restart_monit_service-instance_method">
+  
+    - (<tt>Object</tt>) <strong>restart_monit_service</strong>(service_name, host: &#39;localhost&#39;, port: nil, timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'libraries/start_stop.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_restart_monit_service'>restart_monit_service</span><span class='lparen'>(</span>
+    <span class='id identifier rubyid_service_name'>service_name</span><span class='comma'>,</span>
+    <span class='label'>host:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>localhost</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='label'>port:</span> <span class='kw'>nil</span><span class='comma'>,</span>
+    <span class='label'>timeout_sec:</span> <span class='const'>DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_get_stable_monit_service_status'>get_stable_monit_service_status</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_shell_out!'>shell_out!</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit restart </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+
+  <span class='comment'># Wait for service status to stabilize once again.
+</span>  <span class='id identifier rubyid_get_stable_monit_service_status'>get_stable_monit_service_status</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_host'>host</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_port'>port</span>
+    <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Waiting for service </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> to become available on host </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_host'>host</span><span class='embexpr_end'>}</span><span class='tstring_content'>, port </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_port'>port</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='const'>WaitUtil</span><span class='period'>.</span><span class='id identifier rubyid_wait_for_service'>wait_for_service</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='comma'>,</span> <span class='id identifier rubyid_host'>host</span><span class='comma'>,</span> <span class='id identifier rubyid_port'>port</span><span class='comma'>,</span> <span class='label'>delay_sec:</span> <span class='int'>1</span><span class='comma'>,</span>
+      <span class='label'>timeout_sec:</span> <span class='id identifier rubyid_timeout_sec'>timeout_sec</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="start_monit_service-instance_method">
+  
+    - (<tt>Object</tt>) <strong>start_monit_service</strong>(service_name, host: &#39;localhost&#39;, port: nil, timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'libraries/start_stop.rb', line 27</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_start_monit_service'>start_monit_service</span><span class='lparen'>(</span>
+    <span class='id identifier rubyid_service_name'>service_name</span><span class='comma'>,</span>
+    <span class='label'>host:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>localhost</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='label'>port:</span> <span class='kw'>nil</span><span class='comma'>,</span>
+    <span class='label'>timeout_sec:</span> <span class='const'>DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC</span><span class='rparen'>)</span>
+
+  <span class='comment'># Wait for the service status to stabilize to avoid the
+</span>  <span class='comment'># &quot;Other action already in progress -- please try again later&quot; error.
+</span>
+  <span class='id identifier rubyid_get_stable_monit_service_status'>get_stable_monit_service_status</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_shell_out!'>shell_out!</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit start </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+
+  <span class='comment'># Wait for service status to stabilize once again.
+</span>  <span class='id identifier rubyid_get_stable_monit_service_status'>get_stable_monit_service_status</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_host'>host</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_port'>port</span>
+    <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Waiting for service </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> to become available on host </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_host'>host</span><span class='embexpr_end'>}</span><span class='tstring_content'>, port </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_port'>port</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='const'>WaitUtil</span><span class='period'>.</span><span class='id identifier rubyid_wait_for_service'>wait_for_service</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='comma'>,</span> <span class='id identifier rubyid_host'>host</span><span class='comma'>,</span> <span class='id identifier rubyid_port'>port</span><span class='comma'>,</span> <span class='label'>delay_sec:</span> <span class='int'>1</span><span class='comma'>,</span>
+      <span class='label'>timeout_sec:</span> <span class='id identifier rubyid_timeout_sec'>timeout_sec</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="stop_monit_service-instance_method">
+  
+    - (<tt>Object</tt>) <strong>stop_monit_service</strong>(service_name) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53
+54
+55</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'libraries/start_stop.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_stop_monit_service'>stop_monit_service</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_get_stable_monit_service_status'>get_stable_monit_service_status</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_shell_out!'>shell_out!</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit stop </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_get_stable_monit_service_status'>get_stable_monit_service_status</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Mon Apr 20 13:10:45 2015 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-2.1.5).
+</div>
+
+  </body>
+</html>
