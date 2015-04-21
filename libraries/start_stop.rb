@@ -28,15 +28,18 @@ class Chef
       # to start listening on the given TCP port before returning.
       #
       # @param service_name [String] service name
-      # @param host [String] (optional) host to wait for
-      # @param port [Integer] (optional) TCP port number to wait for
-      # @param timeout_sec [Integer] (optional) the maximum number of seconds to wait for the given
-      #   host/port combination to become available.
-      def start_monit_service(
-          service_name,
-          host: 'localhost',
-          port: nil,
-          timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC)
+      # @param options [Hash] a hash with optional arguments:
+      #
+      #   * `:host` - host to wait for
+      #   * `:port` - TCP port number to wait for
+      #   * `:timeout_sec` - the maximum number of seconds to wait for the given host/port
+      #     combination to become available.
+      def start_monit_service(service_name, options = {})
+        options = options.clone
+        host = options.delete(:host) || 'localhost',
+        port = options.delete(:port)
+        timeout_sec = options.delete(:timeout_sec) || DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC
+        raise "Invalid options: #{options}" unless options.empty?
 
         # Wait for the service status to stabilize to avoid the
         # "Other action already in progress -- please try again later" error.
@@ -70,15 +73,19 @@ class Chef
       # host to start listening on the given TCP port before returning.
       #
       # @param service_name [String] service name
-      # @param host [String] (optional) host to wait for
-      # @param port [Integer] (optional) TCP port number to wait for
-      # @param timeout_sec [Integer] (optional) the maximum number of seconds to wait for the given
-      #   host/port combination to become available.
-      def restart_monit_service(
-          service_name,
-          host: 'localhost',
-          port: nil,
-          timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC)
+      # @param options [Hash] a hash with optional arguments:
+      #
+      #   * `:host` - host to wait for
+      #   * `:port` - TCP port number to wait for
+      #   * `:timeout_sec` - the maximum number of seconds to wait for the given host/port
+      #     combination to become available.
+      def restart_monit_service(service_name, options = {})
+        options = options.clone
+        host = options.delete(:host) || 'localhost',
+        port = options.delete(:port)
+        timeout_sec = options.delete(:timeout_sec) || DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC
+        raise "Invalid options: #{options}" unless options.empty?
+
         get_stable_monit_service_status(service_name)
         shell_out!("monit restart #{service_name}")
 
