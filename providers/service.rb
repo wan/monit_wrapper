@@ -31,6 +31,8 @@ action :start do  # ~FC017
       end
     elsif new_resource.fallback_to_regular_service
       wait_for_host_port(new_resource.wait_for_host_port)
+      Chef::Log.info(
+        "No Monit service #{service_name} registered, failling back to starting a regular service")
       service service_name do
         action :start
       end
@@ -52,6 +54,8 @@ action :stop do  # ~FC017
         action :run
       end
     elsif new_resource.fallback_to_regular_service
+      Chef::Log.info(
+        "No Monit service #{service_name} registered, failling back to stopping a regular service")
       service service_name do
         action :stop
       end
