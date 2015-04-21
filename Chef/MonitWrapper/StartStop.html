@@ -128,7 +128,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#restart_monit_service-instance_method" title="#restart_monit_service (instance method)">- (Object) <strong>restart_monit_service</strong>(service_name, host: &#39;localhost&#39;, port: nil, timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC) </a>
+      <a href="#restart_monit_service-instance_method" title="#restart_monit_service (instance method)">- (Object) <strong>restart_monit_service</strong>(service_name, options = {}) </a>
     
 
     
@@ -151,7 +151,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#start_monit_service-instance_method" title="#start_monit_service (instance method)">- (Object) <strong>start_monit_service</strong>(service_name, host: &#39;localhost&#39;, port: nil, timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC) </a>
+      <a href="#start_monit_service-instance_method" title="#start_monit_service (instance method)">- (Object) <strong>start_monit_service</strong>(service_name, options = {}) </a>
     
 
     
@@ -219,7 +219,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="restart_monit_service-instance_method">
   
-    - (<tt>Object</tt>) <strong>restart_monit_service</strong>(service_name, host: &#39;localhost&#39;, port: nil, timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC) 
+    - (<tt>Object</tt>) <strong>restart_monit_service</strong>(service_name, options = {}) 
   
 
   
@@ -255,46 +255,24 @@ host to start listening on the given TCP port before returning.</p>
   
     <li>
       
-        <span class='name'>host</span>
+        <span class='name'>options</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Hash</tt>)</span>
       
       
-      
-        &mdash;
-        <div class='inline'><p>(optional) host to wait for</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>port</span>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>(optional) TCP port number to wait for</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>timeout_sec</span>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>(optional) the maximum number of seconds to wait for the given
-host/port combination to become available.</p>
+        <div class='inline'><p>a hash with optional arguments:</p>
+
+<ul>
+<li><code>:host</code> - host to wait for</li>
+<li><code>:port</code> - TCP port number to wait for</li>
+<li><code>:timeout_sec</code> - the maximum number of seconds to wait for the given host/port
+combination to become available.</li>
+</ul>
 </div>
       
     </li>
@@ -308,11 +286,6 @@ host/port combination to become available.</p>
       <pre class="lines">
 
 
-77
-78
-79
-80
-81
 82
 83
 84
@@ -325,16 +298,25 @@ host/port combination to become available.</p>
 91
 92
 93
-94</pre>
+94
+95
+96
+97
+98
+99
+100
+101</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'libraries/start_stop.rb', line 77</span>
+      <pre class="code"><span class="info file"># File 'libraries/start_stop.rb', line 82</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_restart_monit_service'>restart_monit_service</span><span class='lparen'>(</span>
-    <span class='id identifier rubyid_service_name'>service_name</span><span class='comma'>,</span>
-    <span class='label'>host:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>localhost</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-    <span class='label'>port:</span> <span class='kw'>nil</span><span class='comma'>,</span>
-    <span class='label'>timeout_sec:</span> <span class='const'>DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_restart_monit_service'>restart_monit_service</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_clone'>clone</span>
+  <span class='id identifier rubyid_host'>host</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:host</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>localhost</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+  <span class='id identifier rubyid_port'>port</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:port</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_timeout_sec'>timeout_sec</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:timeout_sec</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='const'>DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid options: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_options'>options</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+
   <span class='id identifier rubyid_get_stable_monit_service_status'>get_stable_monit_service_status</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_shell_out!'>shell_out!</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit restart </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 
@@ -356,7 +338,7 @@ host/port combination to become available.</p>
       <div class="method_details ">
   <h3 class="signature " id="start_monit_service-instance_method">
   
-    - (<tt>Object</tt>) <strong>start_monit_service</strong>(service_name, host: &#39;localhost&#39;, port: nil, timeout_sec: DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC) 
+    - (<tt>Object</tt>) <strong>start_monit_service</strong>(service_name, options = {}) 
   
 
   
@@ -392,46 +374,24 @@ to start listening on the given TCP port before returning.</p>
   
     <li>
       
-        <span class='name'>host</span>
+        <span class='name'>options</span>
       
       
-        <span class='type'>(<tt>String</tt>)</span>
+        <span class='type'>(<tt>Hash</tt>)</span>
       
       
-      
-        &mdash;
-        <div class='inline'><p>(optional) host to wait for</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>port</span>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
       
       
         &mdash;
-        <div class='inline'><p>(optional) TCP port number to wait for</p>
-</div>
-      
-    </li>
-  
-    <li>
-      
-        <span class='name'>timeout_sec</span>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>(optional) the maximum number of seconds to wait for the given
-host/port combination to become available.</p>
+        <div class='inline'><p>a hash with optional arguments:</p>
+
+<ul>
+<li><code>:host</code> - host to wait for</li>
+<li><code>:port</code> - TCP port number to wait for</li>
+<li><code>:timeout_sec</code> - the maximum number of seconds to wait for the given host/port
+combination to become available.</li>
+</ul>
 </div>
       
     </li>
@@ -445,8 +405,6 @@ host/port combination to become available.</p>
       <pre class="lines">
 
 
-35
-36
 37
 38
 39
@@ -468,16 +426,20 @@ host/port combination to become available.</p>
 55
 56
 57
-58</pre>
+58
+59
+60
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'libraries/start_stop.rb', line 35</span>
+      <pre class="code"><span class="info file"># File 'libraries/start_stop.rb', line 37</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_start_monit_service'>start_monit_service</span><span class='lparen'>(</span>
-    <span class='id identifier rubyid_service_name'>service_name</span><span class='comma'>,</span>
-    <span class='label'>host:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>localhost</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
-    <span class='label'>port:</span> <span class='kw'>nil</span><span class='comma'>,</span>
-    <span class='label'>timeout_sec:</span> <span class='const'>DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_start_monit_service'>start_monit_service</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_clone'>clone</span>
+  <span class='id identifier rubyid_host'>host</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:host</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>localhost</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+  <span class='id identifier rubyid_port'>port</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:port</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_timeout_sec'>timeout_sec</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='symbol'>:timeout_sec</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='const'>DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid options: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_options'>options</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
 
   <span class='comment'># Wait for the service status to stabilize to avoid the
 </span>  <span class='comment'># &quot;Other action already in progress -- please try again later&quot; error.
@@ -528,14 +490,14 @@ issuing the stop command.</p>
       <pre class="lines">
 
 
-62
-63
-64
 65
-66</pre>
+66
+67
+68
+69</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'libraries/start_stop.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'libraries/start_stop.rb', line 65</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_stop_monit_service'>stop_monit_service</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_get_stable_monit_service_status'>get_stable_monit_service_status</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
@@ -552,7 +514,7 @@ issuing the stop command.</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Apr 21 13:08:32 2015 by
+  Generated on Tue Apr 21 14:04:50 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.1.5).
 </div>
