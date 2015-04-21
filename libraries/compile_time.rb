@@ -12,21 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe 'monit'
 
-# Ensure monit daemon is running. This may not happen on its own on Docker.
-bash 'start-monit' do
-  code '/etc/init.d/monit start'
+class Chef
+  module MonitWrapper
+    # Actions we may need to run during Chef compile time.
+    module CompileTime
+
+      # Install the Monit package at Chef compile time so we can query process status.
+      def install_monit_at_compile_time
+        package('monit').run_action(:install)
+        service('monit').run_action(:start)
+      end
+
+    end
+  end
 end
 
-chef_gem 'waitutil'
-
-template '/usr/local/bin/start_stop_service_from_monit.sh' do
-  source 'start_stop_service_from_monit.sh.erb'
-  owner 'root'
-  group 'root'
-  mode '0744'
-  variables timeout_sec: node['monit_wrapper']['start_stop_timeout_sec']
-end
-
-install_monit_at_compile_time
+Chef::Recipe.send(:include, Chef::MonitWrapper::CompileTime)
