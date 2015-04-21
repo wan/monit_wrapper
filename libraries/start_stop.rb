@@ -13,7 +13,6 @@
 # limitations under the License.
 
 require 'chef/mixin/shell_out'
-require 'waitutil'
 require_relative 'status'
 
 class Chef
@@ -50,6 +49,7 @@ class Chef
         get_stable_monit_service_status(service_name)
 
         if host && port
+          require 'waitutil'  # Only require this when necessary, so that the gem is installed.
           Chef::Log.info(
             "Waiting for service #{service_name} to become available on host #{host}, port #{port}")
           WaitUtil.wait_for_service(service_name, host, port, delay_sec: 1,
@@ -85,6 +85,7 @@ class Chef
         # Wait for service status to stabilize once again.
         get_stable_monit_service_status(service_name)
         if host && port
+          require 'waitutil'  # Only require this when necessary, so that the gem is installed.
           Chef::Log.info(
             "Waiting for service #{service_name} to become available on host #{host}, port #{port}")
           WaitUtil.wait_for_service(service_name, host, port, delay_sec: 1,

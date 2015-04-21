@@ -18,13 +18,13 @@ provisioner:
   name: chef_solo
 
 platforms:
-- name: ubuntu-12.04
+  - name: ubuntu-12.04
 
 suites:
-- name: testkitchen_monit_wrapper
-  run_list:
-  - recipe[monit_wrapper_test]
-  - recipe[minitest-handler]
-  attributes:
-    monit:
-      polling_frequency: 3  # for faster tests
+  - name: testkitchen_monit_wrapper
+    run_list:
+      - recipe[monit_wrapper_test]
+      - recipe[minitest-handler]
+    attributes:
+      monit:
+        polling_frequency: 3  # for faster tests
