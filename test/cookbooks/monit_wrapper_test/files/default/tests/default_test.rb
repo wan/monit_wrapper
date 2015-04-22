@@ -64,7 +64,7 @@ class MonitWrapperSpec < MiniTest::Chef::Spec
     end
 
     it 'sets the Monit executable path' do
-      file(node['monit']['executable_path']).must_exist
+      file(node['monit']['executable']).must_exist
     end
 
     it 'creates the Monit configuration for the "myservice" service' do
