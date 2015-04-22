@@ -1,4 +1,4 @@
-# Copyright 2015 ClearStory Data, Inc.
+# Copyright © 2015 ClearStory Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+if platform_family?('rhel') && node['monit']['install_method'] != 'source'
+  Chef::Log.warn(
+    "Setting node['monit']['install_method'] to 'source' on a RedHat-based system because " \
+    "the monit_wrapper cookbook requires a Monit version of 5.2 or later to utilize the " \
+    "'matching' feature. Please note that this won't help if the monit-ng default recipe " \
+    "is included in the run list before the monit_wrapper recipe."
+  )
+  node.override['monit']['install_method'] = 'source'
+  node.default['monit']['executable'] = '/usr/local/bin/monit'
+else
+  node.default['monit']['executable'] = '/usr/bin/monit'
+end
 
 include_recipe 'monit-ng'
 

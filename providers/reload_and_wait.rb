@@ -28,7 +28,7 @@ action :reload_and_wait do
         delay_sec: 0.2,
         timeout_sec: 30
       ) do
-        p = shell_out('/usr/bin/monit status')
+        p = shell_out("#{node['monit']['executable']} status")
         stdout_stderr_combined = "stdout:\n#{p.stdout}\nstderr:#{p.stderr}"
         if p.stderr.include?('Status not available -- the monit daemon is not running')
           # Monit is probably still starting up. Wait a bit longer.

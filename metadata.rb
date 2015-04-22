@@ -21,7 +21,7 @@ version          '3.1.5'
 source_url       'https://github.com/clearstorydata-cookbooks/monit_wrapper'
 issues_url       'https://github.com/clearstorydata-cookbooks/monit_wrapper/issues'
 
-%w( debian ubuntu ).each do |os|
+%w( debian ubuntu redhat centos fedora ).each do |os|
   supports os
 end
 

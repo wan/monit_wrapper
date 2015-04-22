@@ -50,7 +50,7 @@ action :stop do  # ~FC017
     if monit_service_registered?(service_name)
       bash "monit-stop-#{service_name}" do
         user 'root'
-        code "monit stop #{service_name}"
+        code "#{node['monit']['executable']} stop #{service_name}"
         action :run
       end
     elsif new_resource.fallback_to_regular_service
@@ -77,7 +77,7 @@ action :restart do  # ~FC017
   notifying_action_wrapper do
     bash "monit-#{command}-#{new_resource.name}" do
       user 'root'
-      code "monit #{command} #{new_resource.name}"
+      code "#{node['monit']['executable']} #{command} #{new_resource.name}"
       action :run
     end
   end

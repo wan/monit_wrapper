@@ -28,7 +28,7 @@ class Chef
       #   Example return value:
       #   `{ 'sshd' => 'Running', 'my-service' => 'Not monitored' }`.
       def get_monit_summary
-        p = shell_out('monit summary')
+        p = shell_out("#{node['monit']['executable']} summary")
         unless p.exitstatus == 0
           Chef::Log.fatal("Command '#{p.command}' failed\n" +
                           "stdout:\n#{p.stdout}\nstderr:\n#{p.stderr}")
@@ -113,10 +113,16 @@ class Chef
       def parse_monit_summary(monit_summary_stdout)
         process_name_to_status = {}
         monit_summary_stdout.split("\n").each do |line|
-          if line =~ /^Process\s+'(\S+)'\s+([A-Za-z ]+)$/
+          # The process status can include letters, spaces, and dashes.
+          if line =~ /^Process\s+'(\S+)'\s+([A-Za-z -]+)$/
             process_name_to_status[$1] = $2.strip
           end
         end
+        Chef::Log.debug(
+          "Raw 'monit summary' stdout:\n" \
+          "#{monit_summary_stdout.split("\n").map {|line| "    #{line}" }.join("\n")}\n" \
+          "Parsed 'monit summary' output:\n" \
+          "#{process_name_to_status}")
         process_name_to_status
       end
     end
