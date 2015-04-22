@@ -26,5 +26,5 @@ issues_url       'https://github.com/clearstorydata-cookbooks/monit_wrapper/issu
 end
 
 depends 'apt'
-depends 'monit'
+depends 'monit-ng'
 depends 'notifying-action', '~> 1.0.1'

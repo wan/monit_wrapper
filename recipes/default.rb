@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include_recipe 'monit'
+include_recipe 'monit-ng'
 
 # Ensure monit daemon is running. This may not happen on its own on Docker.
 bash 'start-monit' do

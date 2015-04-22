@@ -25,17 +25,23 @@ action :reload_and_wait do
       require 'waitutil'
       WaitUtil.wait_for_condition(
         "#{new_resource.name} to show up in the output of 'monit status'",
-        :delay_sec => 0.2,
-        :timeout_sec => 30
+        delay_sec: 0.2,
+        timeout_sec: 30
       ) do
         p = shell_out('/usr/bin/monit status')
-        if p.exitstatus != 0
-          Chef::Log.fatal("Command '#{p.command}' failed\n" +
-                          "stdout:\n#{p.stdout}\nstderr:\n#{p.stderr}")
-          raise
+        stdout_stderr_combined = "stdout:\n#{p.stdout}\nstderr:#{p.stderr}"
+        if p.stderr.include?('Status not available -- the monit daemon is not running')
+          # Monit is probably still starting up. Wait a bit longer.
+          [false, stdout_stderr_combined]
+        else
+          if p.exitstatus != 0
+            Chef::Log.fatal("Command '#{p.command}' failed\n" +
+                            "stdout:\n#{p.stdout}\nstderr:\n#{p.stderr}")
+            fail
+          end
+          [p.stdout.split("\n").include?("Process '#{new_resource.name}'"),
+           stdout_stderr_combined]
         end
-        [p.stdout.split("\n").include?("Process '#{new_resource.name}'"),
-         "stdout:\n#{p.stdout}\nstderr:#{p.stderr}"]
       end
     end
   end

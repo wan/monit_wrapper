@@ -56,7 +56,7 @@ class MonitWrapperSpec < MiniTest::Chef::Spec
     end
 
     it 'creates the Monit configuration for the "myservice" service' do
-      file('/etc/monit/conf.d/myservice.monitrc').must_exist
+      file('/etc/monit/conf.d/myservice.conf').must_exist
     end
 
     it 'allows stopping and starting "myservice" service using monit' do

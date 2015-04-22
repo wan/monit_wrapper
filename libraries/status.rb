@@ -102,7 +102,9 @@ class Chef
       # "... pending", or "Does not exist", but this definition may change in the future.
       # @return [Boolean] `true` if the given service status is considered "stable".
       def monit_status_stable?(status)
-        !status.nil? && status != 'Initializing' && status !~ / pending$/ &&
+        !status.nil? &&
+          status != 'Initializing' &&
+          status !~ / pending$/ &&
           status != 'Does not exist'
       end
 

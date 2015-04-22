@@ -19,7 +19,13 @@ require 'chef/mixin/shell_out'
 action :create do  # ~FC017
   # We disable FC017 (LWRP does not notify when updated) because we are using
   # notifying_action_wrapper that notifies all subscribers when the template is regenerated.
-  template_resource_name = "#{node['monit']['includes_dir']}/#{new_resource.name}.monitrc"
+
+  deprecated_service_conf_path =
+    ::File.join(node['monit']['conf_dir'], "#{new_resource.name}.monitrc")
+
+  # The monit-ng cookbook we're using configures Monit to look for .conf files.
+  template_resource_name = ::File.join(node['monit']['conf_dir'], "#{new_resource.name}.conf")
+
   notifying_action_wrapper(
     allow_updates_from: "template[#{template_resource_name}]",
     verbose: true
@@ -56,13 +62,17 @@ action :create do  # ~FC017
       action :create
     end
 
+    file deprecated_service_conf_path do
+      action :delete
+    end
+
     Chef::Log.info("Reloading Monit configuration and waiting for service #{new_resource.name}")
     monit_wrapper_reload_and_wait new_resource.name
   end
 end
 
 action :delete do
-  conf_file = "#{node['monit']['includes_dir']}/#{new_resource.name}.monitrc"
+  conf_file = "#{node['monit']['conf_dir']}/#{new_resource.name}.monitrc"
   if ::File.exists?(conf_file)
     file conf_file do
       action :delete
