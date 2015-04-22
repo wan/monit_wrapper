@@ -37,4 +37,5 @@ suites:
       - recipe[minitest-handler]
     attributes:
       monit:
-        polling_frequency: 3  # for faster tests
+        config:
+          poll_freq: 3  # for faster tests

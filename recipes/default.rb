@@ -42,3 +42,11 @@ template '/usr/local/bin/start_stop_service_from_monit.sh' do
   mode '0744'
   variables timeout_sec: node['monit_wrapper']['start_stop_timeout_sec']
 end
+
+template '/usr/local/bin/monit_service_ctl.sh' do
+  source 'monit_service_ctl.sh.erb'
+  owner 'root'
+  group 'root'
+  mode '0755'
+  variables monit_executable: node['monit']['executable']
+end

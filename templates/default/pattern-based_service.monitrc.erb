@@ -14,8 +14,8 @@
 
 # managed by chef, changes will be overwritten
 
-check process <%= @service_name %>
-  matching "<%= @cmd_line_pattern.gsub('"', '\"') %>"
+check process <%= @service_name.inspect %>
+  matching <%= @cmd_line_pattern.inspect %>
   every 1 cycles
 
   start program "/bin/bash -c 'exec <%= @cmd_line %><% if @out_file %> ><%= @out_file %> <% end %><% if @err_file %> 2><%= @err_file %><% end %>'"

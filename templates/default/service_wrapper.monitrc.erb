@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # managed by chef, changes will be overwritten
-check process "<%= @service_name %>"
+check process <%= @service_name.inspect %>
   <% if @pattern %>
     matching <%= @pattern.inspect %>
   <% end %>
