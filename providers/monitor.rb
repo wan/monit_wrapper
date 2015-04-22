@@ -1,4 +1,4 @@
-# Copyright © 2015 ClearStory Data, Inc.
+# Copyright 2015 ClearStory Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,22 +15,24 @@
 include Chef::MonitWrapper::Wait
 require 'chef/mixin/shell_out'
 
+def deprecated_service_conf_path
+  ::File.join(node['monit']['conf_dir'], "#{new_resource.name}.monitrc")
+end
+
+def service_conf_path
+  # The monit-ng cookbook we're using configures Monit to look for .conf files.
+  ::File.join(node['monit']['conf_dir'], "#{new_resource.name}.conf")
+end
+
 # Creates a configuration file for a new Monit-monitored service.
 action :create do  # ~FC017
   # We disable FC017 (LWRP does not notify when updated) because we are using
   # notifying_action_wrapper that notifies all subscribers when the template is regenerated.
 
-  deprecated_service_conf_path =
-    ::File.join(node['monit']['conf_dir'], "#{new_resource.name}.monitrc")
-
-  # The monit-ng cookbook we're using configures Monit to look for .conf files.
-  template_resource_name = ::File.join(node['monit']['conf_dir'], "#{new_resource.name}.conf")
-
   notifying_action_wrapper(
-    allow_updates_from: "template[#{template_resource_name}]",
+    allow_updates_from: "template[#{service_conf_path}]",
     verbose: true
   ) do
-
     wait_for_host_port(new_resource.wait_for_host_port)
 
     variables = (new_resource.variables || {}).to_hash.clone
@@ -49,14 +51,14 @@ action :create do  # ~FC017
     end
 
     Chef::Log.info(
-      "Creating Monit configuration file #{template_resource_name} " \
+      "Creating Monit configuration file #{service_conf_path} " \
       "for service #{new_resource.name}"
     )
-    template template_resource_name do
+    template service_conf_path do
       owner 'root'
       group 'root'
       mode  '0644'
-      source new_resource.template_source || 'service_wrapper.monitrc.erb'
+      source new_resource.template_source || 'service_wrapper.conf.erb'
       cookbook new_resource.template_cookbook || 'monit_wrapper'
       variables variables
       action :create
@@ -72,9 +74,12 @@ action :create do  # ~FC017
 end
 
 action :delete do
-  conf_file = "#{node['monit']['conf_dir']}/#{new_resource.name}.monitrc"
-  if ::File.exists?(conf_file)
-    file conf_file do
+  if ::File.exists?(service_conf_path)
+    file service_conf_path do
+      action :delete
+    end
+
+    file deprecated_service_conf_path do
       action :delete
     end
 

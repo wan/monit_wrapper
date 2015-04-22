@@ -1,4 +1,4 @@
-# Copyright © 2015 ClearStory Data, Inc.
+# Copyright 2015 ClearStory Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,5 +28,3 @@ template '/usr/local/bin/start_stop_service_from_monit.sh' do
   mode '0744'
   variables timeout_sec: node['monit_wrapper']['start_stop_timeout_sec']
 end
-
-install_monit_at_compile_time
