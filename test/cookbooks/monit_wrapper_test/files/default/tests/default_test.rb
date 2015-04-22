@@ -52,11 +52,23 @@ class MonitWrapperSpec < MiniTest::Chef::Spec
     end
 
     it 'installs the "monit" package' do
-      package('monit').must_be_installed
+      unless node['platform_family'] == 'rhel'
+        file('/usr/local/bin/monit').must_exist
+      end
+    end
+
+    it 'installs Monit from source into /usr/local/bin' do
+      if node['platform_family'] == 'rhel'
+        package('monit').must_exist
+      end
+    end
+
+    it 'sets the Monit executable path' do
+      file(node['monit']['executable_path']).must_exist
     end
 
     it 'creates the Monit configuration for the "myservice" service' do
-      file('/etc/monit/conf.d/myservice.conf').must_exist
+      file("#{node['monit']['conf_dir']}/myservice.conf").must_exist
     end
 
     it 'allows stopping and starting "myservice" service using monit' do
