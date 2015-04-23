@@ -28,9 +28,10 @@ end
 
 include_recipe 'monit-ng'
 
-# Ensure monit daemon is running. This may not happen on its own on Docker.
-service 'monit' do
-  action :start
+# Ensure monit daemon is running. This may not happen on its own on Docker. We are not using the
+# "service" resource, because service[monit] is also defined in monit-ng.
+bash 'monit_wrapper_start_monit_service' do
+  code 'sudo service monit start'
 end
 
 chef_gem 'waitutil'

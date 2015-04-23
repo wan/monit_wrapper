@@ -13,6 +13,7 @@
 # limitations under the License.
 
 include Chef::MonitWrapper::Wait
+include Chef::MonitWrapper::StartStop
 
 # Start the given Monit service.
 action :start do  # ~FC017
@@ -23,11 +24,8 @@ action :start do  # ~FC017
       Chef::Log.info("Service #{service_name} is already running, skipping start action")
     elsif monit_service_registered?(service_name)
       wait_for_host_port(new_resource.wait_for_host_port)
-      bash "monit-start-#{service_name}" do
-        user 'root'
-        code "/usr/local/bin/monit_service_ctl.sh start #{service_name}"
-        not_if { monit_service_running?(service_name, verbose: true) }
-        action :run
+      unless monit_service_running?(service_name, verbose: true)
+        start_monit_service(service_name)
       end
     elsif new_resource.fallback_to_regular_service
       wait_for_host_port(new_resource.wait_for_host_port)
@@ -48,11 +46,7 @@ action :stop do  # ~FC017
   service_name = new_resource.name
   notifying_action_wrapper do
     if monit_service_registered?(service_name)
-      bash "monit-stop-#{service_name}" do
-        user 'root'
-        code "/usr/local/bin/monit_service_ctl.sh stop #{service_name}"
-        action :run
-      end
+      stop_monit_service(service_name)
     elsif new_resource.fallback_to_regular_service
       Chef::Log.info(
         "No Monit service #{service_name} registered, failling back to stopping a regular service")
