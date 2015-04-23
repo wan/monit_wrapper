@@ -586,12 +586,32 @@ running.</td>
 29
 30
 31
-32</pre>
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'recipes/default.rb', line 1</span>
 
-<span class='comment'># Copyright © 2015 ClearStory Data, Inc.
+<span class='comment'># Copyright 2015 ClearStory Data, Inc.
 </span><span class='comment'>#
 </span><span class='comment'># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
 </span><span class='comment'># you may not use this file except in compliance with the License.
@@ -605,7 +625,21 @@ running.</td>
 </span><span class='comment'># See the License for the specific language governing permissions and
 </span><span class='comment'># limitations under the License.
 </span>
-<span class='id identifier rubyid_include_recipe'>include_recipe</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span>
+
+<span class='kw'>if</span> <span class='id identifier rubyid_platform_family?'>platform_family?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rhel</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_node'>node</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>install_method</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>source</span><span class='tstring_end'>&#39;</span></span>
+  <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_warn'>warn</span><span class='lparen'>(</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Setting node[&#39;monit&#39;][&#39;install_method&#39;] to &#39;source&#39; on a RedHat-based system because </span><span class='tstring_end'>&quot;</span></span> \
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>the monit_wrapper cookbook requires a Monit version of 5.2 or later to utilize the </span><span class='tstring_end'>&quot;</span></span> \
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>&#39;matching&#39; feature. Please note that this won&#39;t help if the monit-ng default recipe </span><span class='tstring_end'>&quot;</span></span> \
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>is included in the run list before the monit_wrapper recipe.</span><span class='tstring_end'>&quot;</span></span>
+  <span class='rparen'>)</span>
+  <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_override'>override</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>install_method</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>source</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_default'>default</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>executable</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/local/bin/monit</span><span class='tstring_end'>&#39;</span></span>
+<span class='kw'>else</span>
+  <span class='id identifier rubyid_node'>node</span><span class='period'>.</span><span class='id identifier rubyid_default'>default</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>executable</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/bin/monit</span><span class='tstring_end'>&#39;</span></span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_include_recipe'>include_recipe</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit-ng</span><span class='tstring_end'>&#39;</span></span>
 
 <span class='comment'># Ensure monit daemon is running. This may not happen on its own on Docker.
 </span><span class='id identifier rubyid_bash'>bash</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>start-monit</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
@@ -622,7 +656,13 @@ running.</td>
   <span class='id identifier rubyid_variables'>variables</span> <span class='label'>timeout_sec:</span> <span class='id identifier rubyid_node'>node</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit_wrapper</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>start_stop_timeout_sec</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
 <span class='kw'>end</span>
 
-<span class='id identifier rubyid_install_monit_at_compile_time'>install_monit_at_compile_time</span></pre>
+<span class='id identifier rubyid_template'>template</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/local/bin/monit_service_ctl.sh</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_source'>source</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit_service_ctl.sh.erb</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_owner'>owner</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>root</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_group'>group</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>root</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_mode'>mode</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0755</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_variables'>variables</span> <span class='label'>monit_executable:</span> <span class='id identifier rubyid_node'>node</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>executable</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -691,10 +731,10 @@ running.</td>
       <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Service </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> is already running, skipping start action</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
     <span class='kw'>elsif</span> <span class='id identifier rubyid_monit_service_registered?'>monit_service_registered?</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
       <span class='id identifier rubyid_wait_for_host_port'>wait_for_host_port</span><span class='lparen'>(</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_wait_for_host_port'>wait_for_host_port</span><span class='rparen'>)</span>
-      <span class='id identifier rubyid_bash'>bash</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit-start-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>do</span>
+      <span class='id identifier rubyid_bash'>bash</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit-start-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>do</span>
         <span class='id identifier rubyid_user'>user</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>root</span><span class='tstring_end'>&#39;</span></span>
-        <span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit start </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-        <span class='id identifier rubyid_not_if'>not_if</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_monit_service_running?'>monit_service_running?</span><span class='lparen'>(</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='symbol'>:verbose</span> <span class='op'>=&gt;</span> <span class='kw'>true</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+        <span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/usr/local/bin/monit_service_ctl.sh start </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+        <span class='id identifier rubyid_not_if'>not_if</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_monit_service_running?'>monit_service_running?</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='comma'>,</span> <span class='label'>verbose:</span> <span class='kw'>true</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
         <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:run</span>
       <span class='kw'>end</span>
     <span class='kw'>elsif</span> <span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_fallback_to_regular_service'>fallback_to_regular_service</span>
@@ -762,7 +802,7 @@ running.</td>
     <span class='kw'>if</span> <span class='id identifier rubyid_monit_service_registered?'>monit_service_registered?</span><span class='lparen'>(</span><span class='id identifier rubyid_service_name'>service_name</span><span class='rparen'>)</span>
       <span class='id identifier rubyid_bash'>bash</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit-stop-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>do</span>
         <span class='id identifier rubyid_user'>user</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>root</span><span class='tstring_end'>&#39;</span></span>
-        <span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit stop </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+        <span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/usr/local/bin/monit_service_ctl.sh stop </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_name'>service_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
         <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:run</span>
       <span class='kw'>end</span>
     <span class='kw'>elsif</span> <span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_fallback_to_regular_service'>fallback_to_regular_service</span>
@@ -819,7 +859,7 @@ running.</td>
 
 <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:restart</span> <span class='kw'>do</span>  <span class='comment'># ~FC017
 </span>  <span class='comment'># We disable FC017 because notifying_action_wrapper takes care of notifications.
-</span>  <span class='kw'>if</span> <span class='id identifier rubyid_monit_service_running?'>monit_service_running?</span><span class='lparen'>(</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='symbol'>:verbose</span> <span class='op'>=&gt;</span> <span class='kw'>true</span><span class='rparen'>)</span>
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_monit_service_running?'>monit_service_running?</span><span class='lparen'>(</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='label'>verbose:</span> <span class='kw'>true</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_command'>command</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>restart</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>else</span>
     <span class='id identifier rubyid_command'>command</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>start</span><span class='tstring_end'>&#39;</span></span>
@@ -828,7 +868,7 @@ running.</td>
   <span class='id identifier rubyid_notifying_action_wrapper'>notifying_action_wrapper</span> <span class='kw'>do</span>
     <span class='id identifier rubyid_bash'>bash</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_command'>command</span><span class='embexpr_end'>}</span><span class='tstring_content'>-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>do</span>
       <span class='id identifier rubyid_user'>user</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>root</span><span class='tstring_end'>&#39;</span></span>
-      <span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>monit </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_command'>command</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='id identifier rubyid_code'>code</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>executable</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_command'>command</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
       <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:run</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
@@ -859,15 +899,6 @@ running.</td>
       <pre class="lines">
 
 
-19
-20
-21
-22
-23
-24
-25
-26
-27
 28
 29
 30
@@ -902,20 +933,31 @@ running.</td>
 59
 60
 61
-62</pre>
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'providers/monitor.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'providers/monitor.rb', line 28</span>
 
 <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:create</span> <span class='kw'>do</span>  <span class='comment'># ~FC017
 </span>  <span class='comment'># We disable FC017 (LWRP does not notify when updated) because we are using
 </span>  <span class='comment'># notifying_action_wrapper that notifies all subscribers when the template is regenerated.
-</span>  <span class='id identifier rubyid_template_resource_name'>template_resource_name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>includes_dir</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>.monitrc</span><span class='tstring_end'>&quot;</span></span>
+</span>
   <span class='id identifier rubyid_notifying_action_wrapper'>notifying_action_wrapper</span><span class='lparen'>(</span>
-    <span class='label'>allow_updates_from:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>template[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_template_resource_name'>template_resource_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+    <span class='label'>allow_updates_from:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>template[</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_conf_path'>service_conf_path</span><span class='embexpr_end'>}</span><span class='tstring_content'>]</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
     <span class='label'>verbose:</span> <span class='kw'>true</span>
   <span class='rparen'>)</span> <span class='kw'>do</span>
-
     <span class='id identifier rubyid_wait_for_host_port'>wait_for_host_port</span><span class='lparen'>(</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_wait_for_host_port'>wait_for_host_port</span><span class='rparen'>)</span>
 
     <span class='id identifier rubyid_variables'>variables</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_variables'>variables</span> <span class='op'>||</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_hash'>to_hash</span><span class='period'>.</span><span class='id identifier rubyid_clone'>clone</span>
@@ -934,17 +976,21 @@ running.</td>
     <span class='kw'>end</span>
 
     <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span>
-      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Creating Monit configuration file </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_template_resource_name'>template_resource_name</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> \
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Creating Monit configuration file </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_service_conf_path'>service_conf_path</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> \
       <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>for service </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
     <span class='rparen'>)</span>
-    <span class='id identifier rubyid_template'>template</span> <span class='id identifier rubyid_template_resource_name'>template_resource_name</span> <span class='kw'>do</span>
+    <span class='id identifier rubyid_template'>template</span> <span class='id identifier rubyid_service_conf_path'>service_conf_path</span> <span class='kw'>do</span>
       <span class='id identifier rubyid_owner'>owner</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>root</span><span class='tstring_end'>&#39;</span></span>
       <span class='id identifier rubyid_group'>group</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>root</span><span class='tstring_end'>&#39;</span></span>
       <span class='id identifier rubyid_mode'>mode</span>  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0644</span><span class='tstring_end'>&#39;</span></span>
-      <span class='id identifier rubyid_source'>source</span> <span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_template_source'>template_source</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>service_wrapper.monitrc.erb</span><span class='tstring_end'>&#39;</span></span>
+      <span class='id identifier rubyid_source'>source</span> <span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_template_source'>template_source</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>service_wrapper.conf.erb</span><span class='tstring_end'>&#39;</span></span>
       <span class='id identifier rubyid_cookbook'>cookbook</span> <span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_template_cookbook'>template_cookbook</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit_wrapper</span><span class='tstring_end'>&#39;</span></span>
       <span class='id identifier rubyid_variables'>variables</span> <span class='id identifier rubyid_variables'>variables</span>
       <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:create</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_file'>file</span> <span class='id identifier rubyid_deprecated_service_conf_path'>deprecated_service_conf_path</span> <span class='kw'>do</span>
+      <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:delete</span>
     <span class='kw'>end</span>
 
     <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Reloading Monit configuration and waiting for service </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -971,28 +1017,34 @@ running.</td>
       <pre class="lines">
 
 
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
 76
-77</pre>
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'providers/monitor.rb', line 64</span>
+      <pre class="code"><span class="info file"># File 'providers/monitor.rb', line 76</span>
 
 <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:delete</span> <span class='kw'>do</span>
-  <span class='id identifier rubyid_conf_file'>conf_file</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>includes_dir</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>.monitrc</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>if</span> <span class='op'>::</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span><span class='lparen'>(</span><span class='id identifier rubyid_conf_file'>conf_file</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_file'>file</span> <span class='id identifier rubyid_conf_file'>conf_file</span> <span class='kw'>do</span>
+  <span class='kw'>if</span> <span class='op'>::</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span><span class='lparen'>(</span><span class='id identifier rubyid_service_conf_path'>service_conf_path</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_file'>file</span> <span class='id identifier rubyid_service_conf_path'>service_conf_path</span> <span class='kw'>do</span>
+      <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:delete</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_file'>file</span> <span class='id identifier rubyid_deprecated_service_conf_path'>deprecated_service_conf_path</span> <span class='kw'>do</span>
       <span class='id identifier rubyid_action'>action</span> <span class='symbol'>:delete</span>
     <span class='kw'>end</span>
 
@@ -1057,7 +1109,13 @@ running.</td>
 41
 42
 43
-44</pre>
+44
+45
+46
+47
+48
+49
+50</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'providers/reload_and_wait.rb', line 16</span>
@@ -1074,17 +1132,23 @@ running.</td>
       <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>waitutil</span><span class='tstring_end'>&#39;</span></span>
       <span class='const'>WaitUtil</span><span class='period'>.</span><span class='id identifier rubyid_wait_for_condition'>wait_for_condition</span><span class='lparen'>(</span>
         <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'> to show up in the output of &#39;monit status&#39;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
-        <span class='symbol'>:delay_sec</span> <span class='op'>=&gt;</span> <span class='float'>0.2</span><span class='comma'>,</span>
-        <span class='symbol'>:timeout_sec</span> <span class='op'>=&gt;</span> <span class='int'>30</span>
+        <span class='label'>delay_sec:</span> <span class='float'>0.2</span><span class='comma'>,</span>
+        <span class='label'>timeout_sec:</span> <span class='int'>30</span>
       <span class='rparen'>)</span> <span class='kw'>do</span>
-        <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='id identifier rubyid_shell_out'>shell_out</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/bin/monit status</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
-        <span class='kw'>if</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_exitstatus'>exitstatus</span> <span class='op'>!=</span> <span class='int'>0</span>
-          <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_fatal'>fatal</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Command &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_command'>command</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; failed\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
-                          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stdout:\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stdout'>stdout</span><span class='embexpr_end'>}</span><span class='tstring_content'>\nstderr:\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stderr'>stderr</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-          <span class='id identifier rubyid_raise'>raise</span>
+        <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='id identifier rubyid_shell_out'>shell_out</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>executable</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> status</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_stdout_stderr_combined'>stdout_stderr_combined</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stdout:\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stdout'>stdout</span><span class='embexpr_end'>}</span><span class='tstring_content'>\nstderr:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stderr'>stderr</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stderr'>stderr</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Status not available -- the monit daemon is not running</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+          <span class='comment'># Monit is probably still starting up. Wait a bit longer.
+</span>          <span class='lbracket'>[</span><span class='kw'>false</span><span class='comma'>,</span> <span class='id identifier rubyid_stdout_stderr_combined'>stdout_stderr_combined</span><span class='rbracket'>]</span>
+        <span class='kw'>else</span>
+          <span class='kw'>if</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_exitstatus'>exitstatus</span> <span class='op'>!=</span> <span class='int'>0</span>
+            <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_fatal'>fatal</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Command &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_command'>command</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; failed\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
+                            <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stdout:\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stdout'>stdout</span><span class='embexpr_end'>}</span><span class='tstring_content'>\nstderr:\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stderr'>stderr</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_fail'>fail</span>
+          <span class='kw'>end</span>
+          <span class='lbracket'>[</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stdout'>stdout</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Process &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
+           <span class='id identifier rubyid_stdout_stderr_combined'>stdout_stderr_combined</span><span class='rbracket'>]</span>
         <span class='kw'>end</span>
-        <span class='lbracket'>[</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stdout'>stdout</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Process &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_new_resource'>new_resource</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span>
-         <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stdout:\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stdout'>stdout</span><span class='embexpr_end'>}</span><span class='tstring_content'>\nstderr:</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stderr'>stderr</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
       <span class='kw'>end</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
@@ -1158,7 +1222,7 @@ running.</td>
 </div>
 
     <div id="footer">
-  Generated on Tue Apr 21 15:00:56 2015 by
+  Generated on Wed Apr 22 18:50:42 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.1.5).
 </div>

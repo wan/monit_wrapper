@@ -358,7 +358,7 @@ Example return value:
       <pre class="code"><span class="info file"># File 'libraries/status.rb', line 30</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_monit_summary'>get_monit_summary</span>
-  <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='id identifier rubyid_shell_out'>shell_out</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit summary</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_p'>p</span> <span class='op'>=</span> <span class='id identifier rubyid_shell_out'>shell_out</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_node'>node</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>monit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>executable</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'> summary</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_exitstatus'>exitstatus</span> <span class='op'>==</span> <span class='int'>0</span>
     <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_fatal'>fatal</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Command &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_command'>command</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; failed\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>+</span>
                     <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>stdout:\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stdout'>stdout</span><span class='embexpr_end'>}</span><span class='tstring_content'>\nstderr:\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_p'>p</span><span class='period'>.</span><span class='id identifier rubyid_stderr'>stderr</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -784,13 +784,17 @@ change without external influence. Currently this means it is not &quot;Initiali
 104
 105
 106
-107</pre>
+107
+108
+109</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'libraries/status.rb', line 104</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_monit_status_stable?'>monit_status_stable?</span><span class='lparen'>(</span><span class='id identifier rubyid_status'>status</span><span class='rparen'>)</span>
-  <span class='op'>!</span><span class='id identifier rubyid_status'>status</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Initializing</span><span class='tstring_end'>&#39;</span></span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>!~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'> pending$</span><span class='regexp_end'>/</span></span> <span class='op'>&amp;&amp;</span>
+  <span class='op'>!</span><span class='id identifier rubyid_status'>status</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span>
+    <span class='id identifier rubyid_status'>status</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Initializing</span><span class='tstring_end'>&#39;</span></span> <span class='op'>&amp;&amp;</span>
+    <span class='id identifier rubyid_status'>status</span> <span class='op'>!~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'> pending$</span><span class='regexp_end'>/</span></span> <span class='op'>&amp;&amp;</span>
     <span class='id identifier rubyid_status'>status</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Does not exist</span><span class='tstring_end'>&#39;</span></span>
 <span class='kw'>end</span></pre>
     </td>
@@ -824,26 +828,38 @@ mapping service name to its status.</p>
       <pre class="lines">
 
 
-111
-112
 113
 114
 115
 116
 117
 118
-119</pre>
+119
+120
+121
+122
+123
+124
+125
+126
+127</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'libraries/status.rb', line 111</span>
+      <pre class="code"><span class="info file"># File 'libraries/status.rb', line 113</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_monit_summary'>parse_monit_summary</span><span class='lparen'>(</span><span class='id identifier rubyid_monit_summary_stdout'>monit_summary_stdout</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_process_name_to_status'>process_name_to_status</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
   <span class='id identifier rubyid_monit_summary_stdout'>monit_summary_stdout</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_line'>line</span><span class='op'>|</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_line'>line</span> <span class='op'>=~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^Process\s+&#39;(\S+)&#39;\s+([A-Za-z ]+)$</span><span class='regexp_end'>/</span></span>
+    <span class='comment'># The process status can include letters, spaces, and dashes.
+</span>    <span class='kw'>if</span> <span class='id identifier rubyid_line'>line</span> <span class='op'>=~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^Process\s+&#39;(\S+)&#39;\s+([A-Za-z -]+)$</span><span class='regexp_end'>/</span></span>
       <span class='id identifier rubyid_process_name_to_status'>process_name_to_status</span><span class='lbracket'>[</span><span class='backref'>$1</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='backref'>$2</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
+  <span class='const'>Chef</span><span class='op'>::</span><span class='const'>Log</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Raw &#39;monit summary&#39; stdout:\n</span><span class='tstring_end'>&quot;</span></span> \
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_monit_summary_stdout'>monit_summary_stdout</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_line'>line</span><span class='op'>|</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>    </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_line'>line</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span> \
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Parsed &#39;monit summary&#39; output:\n</span><span class='tstring_end'>&quot;</span></span> \
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_process_name_to_status'>process_name_to_status</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_process_name_to_status'>process_name_to_status</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -856,7 +872,7 @@ mapping service name to its status.</p>
 </div>
 
     <div id="footer">
-  Generated on Tue Apr 21 15:00:56 2015 by
+  Generated on Wed Apr 22 18:50:41 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.1.5).
 </div>
