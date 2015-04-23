@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include Chef::MonitWrapper::StartStop
+
 # Reload Monit configuration and wait for it to become aware of the given service.
 action :reload_and_wait do
   script 'monit-reload' do
@@ -21,29 +23,7 @@ action :reload_and_wait do
   end
 
   ruby_block "wait-for-monit-reload-#{new_resource.name}" do
-    block do
-      require 'waitutil'
-      WaitUtil.wait_for_condition(
-        "#{new_resource.name} to show up in the output of 'monit status'",
-        delay_sec: 1,
-        timeout_sec: 120
-      ) do
-        p = shell_out("#{node['monit']['executable']} status")
-        stdout_stderr_combined = "stdout:\n#{p.stdout}\nstderr:#{p.stderr}"
-        if p.stderr.include?('Status not available -- the monit daemon is not running')
-          # Monit is probably still starting up. Wait a bit longer.
-          [false, stdout_stderr_combined]
-        else
-          if p.exitstatus != 0
-            Chef::Log.fatal("Command '#{p.command}' failed\n" +
-                            "stdout:\n#{p.stdout}\nstderr:\n#{p.stderr}")
-            fail
-          end
-          [p.stdout.split("\n").include?("Process '#{new_resource.name}'"),
-           stdout_stderr_combined]
-        end
-      end
-    end
+    block { reload_monit_and_wait_for_service(new_resource.name) }
   end
 
   new_resource.updated_by_last_action(true)

@@ -127,8 +127,8 @@ class Chef
         Chef::Log.debug(
           "Raw 'monit summary' stdout:\n" \
           "#{monit_summary_stdout.split("\n").map {|line| "    #{line}" }.join("\n")}\n" \
-          "Parsed 'monit summary' output:\n" \
-          "#{process_name_to_status}")
+          "Parsed 'monit summary' output:\n" +
+          process_name_to_status.to_s)
         process_name_to_status
       end
     end
