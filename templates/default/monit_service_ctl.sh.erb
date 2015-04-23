@@ -14,9 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +e -u +o pipefail
+set -u
 
-MONIT_START_STOP_TIMEOUT_SEC=60
+MAX_ACTION_ATTEMPTS=12
+ACTION_ATTEMPT_DELAY_SEC=10
+
+MAX_STATUS_QUERY_ATTEMPTS=120
+STATUS_QUERY_ATTEMPT_DELAY_SEC=1
 
 if [ $# -ne 2 ]; then
   echo "Start or stop a Monit service, and wait for the status to be updated." >&2
@@ -35,18 +39,24 @@ if [ "${action}" != "start" ] && [ "${action}" != "stop" ]; then
   exit 1
 fi
 
-monit_attempt=0
+if [ "${action}" == "start" ]; then
+  expected_status="Running"
+else
+  expected_status="Not monitored"
+fi
+
+action_attempt=0
 
 while true; do
-  monit_attempt=$(( "${monit_attempt}" + 1 ))
+  action_attempt=$(( $action_attempt + 1 ))
   if sudo <%= @monit_executable %> "${action}" "${service_name}" 2>&1 >/dev/null | \
       grep "Other action already in progress -- please try again later"; then
-    if [ "${monit_attempt}" -ge 5 ]; then
-      echo "Not retrying to ${action} ${service_name} after ${monit_attempt} attempts" >&2
+    if [ "${action_attempt}" -ge "${MAX_ACTION_ATTEMPTS}" ]; then
+      echo "Not retrying to ${action} ${service_name} after ${action_attempt} attempts" >&2
       exit 1
     fi
-    echo "Monit is busy with a pending action, waiting (attempt ${monit_attempt})" >&2
-    sleep 10
+    echo "Monit is busy with a pending action, waiting (attempt ${action_attempt})" >&2
+    sleep "$ACTION_ATTEMPT_DELAY_SEC"
     continue
   fi
 
@@ -59,20 +69,17 @@ while true; do
   # Success: break and wait for status to stabilize.
   break
 done
+
 set -e -o pipefail
 
-echo 'Waiting for ${service_name} to ${action}'
-attempt=0
+echo "Waiting for ${service_name} to ${action}"
+status_query_attempt=0
 while ! sudo <%= @monit_executable %> summary | \
-      egrep "${service_name}.*${expected_state}$" >/dev/null; do
-  attempt=$(( $attempt + 1 ))
-  if [ $attempt -gt "${MONIT_START_STOP_TIMEOUT_SEC}" ]; then
-    echo 'Timed out waiting for ${service_name} to ${action}' >&2
+      egrep "${service_name}.*${expected_status}$" >/dev/null; do
+  status_query_attempt=$(( $status_query_attempt + 1 ))
+  if [ $status_query_attempt -gt "${MAX_STATUS_QUERY_ATTEMPTS}" ]; then
+    echo "Timed out waiting for ${service_name} to ${action}" >&2
     exit 1
   fi
-  sleep 1
-  if [ "$(( $attempt % 30 ))" -eq 0 ]; then
-    echo 'Re-trying the operation'
-    ( set -x; sudo "<%= @monit_executable %>" "${action}" "${service_name}" )
-  fi
+  sleep "${STATUS_QUERY_ATTEMPT_DELAY_SEC}"
 done

@@ -23,10 +23,10 @@ action :start do  # ~FC017
       Chef::Log.info("Service #{service_name} is already running, skipping start action")
     elsif monit_service_registered?(service_name)
       wait_for_host_port(new_resource.wait_for_host_port)
-      bash "monit-start-#{new_resource.name}" do
+      bash "monit-start-#{service_name}" do
         user 'root'
-        code "monit start #{new_resource.name}"
-        not_if { monit_service_running?(new_resource.name, :verbose => true) }
+        code "/usr/local/bin/monit_service_ctl.sh start #{service_name}"
+        not_if { monit_service_running?(service_name, verbose: true) }
         action :run
       end
     elsif new_resource.fallback_to_regular_service
@@ -50,7 +50,7 @@ action :stop do  # ~FC017
     if monit_service_registered?(service_name)
       bash "monit-stop-#{service_name}" do
         user 'root'
-        code "#{node['monit']['executable']} stop #{service_name}"
+        code "/usr/local/bin/monit_service_ctl.sh stop #{service_name}"
         action :run
       end
     elsif new_resource.fallback_to_regular_service
@@ -68,7 +68,7 @@ end
 # Restart the given Monit service.
 action :restart do  # ~FC017
   # We disable FC017 because notifying_action_wrapper takes care of notifications.
-  if monit_service_running?(new_resource.name, :verbose => true)
+  if monit_service_running?(new_resource.name, verbose: true)
     command = 'restart'
   else
     command = 'start'

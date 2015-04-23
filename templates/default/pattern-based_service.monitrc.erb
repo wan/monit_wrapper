@@ -14,11 +14,16 @@
 
 # managed by chef, changes will be overwritten
 
+<%
+if @cmd_line.include?('"')
+  fail "Command line cannot include double quotes (use single quotes instead). Found: #{@cmd_line}."
+end
+%>
 check process <%= @service_name.inspect %>
   matching <%= @cmd_line_pattern.inspect %>
   every 1 cycles
 
-  start program "/bin/bash -c 'exec <%= @cmd_line %><% if @out_file %> ><%= @out_file %> <% end %><% if @err_file %> 2><%= @err_file %><% end %>'"
+  start program "/usr/bin/nohup <%= @cmd_line %><% if @out_file %> ><%= @out_file %> <% end %><% if @err_file %> 2><%= @err_file %><% end %>"
   <% if @user %> as uid <%= @user %> as gid <%= @group || @user %> <% end %>
 
   stop program "/usr/bin/pkill <% if @user %> -u <%= @user %> <% end %> -f '<%= @cmd_line_pattern %>'"

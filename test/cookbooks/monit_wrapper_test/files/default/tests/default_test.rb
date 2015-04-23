@@ -51,14 +51,14 @@ class MonitWrapperSpec < MiniTest::Chef::Spec
       user('myuser').must_exist
     end
 
-    it 'installs the "monit" package' do
-      unless node['platform_family'] == 'rhel'
+    it 'installs Monit from source into /usr/local/bin on RHEL-family systems' do
+      if node['platform_family'] == 'rhel'
         file('/usr/local/bin/monit').must_exist
       end
     end
 
-    it 'installs Monit from source into /usr/local/bin' do
-      if node['platform_family'] == 'rhel'
+    it 'installs the "monit" package on non-RHEL-family systems' do
+      unless node['platform_family'] == 'rhel'
         package('monit').must_be_installed
       end
     end

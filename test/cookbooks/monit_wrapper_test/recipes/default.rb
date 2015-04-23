@@ -31,7 +31,7 @@ end
 monit_wrapper_monitor 'myservice' do
   template_source 'pattern-based_service.monitrc.erb'
   template_cookbook 'monit_wrapper'
-  variables cmd_line: "/bin/bash -c '/usr/bin/nohup /bin/bash myservice_script &'",
+  variables cmd_line: "/bin/bash #{myservice_script}",
             cmd_line_pattern: "/bin/bash #{myservice_script}",
             user: 'myuser',
             out_file: '/var/log/myservice/myservice.out',
