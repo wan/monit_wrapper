@@ -18,12 +18,23 @@
 if @cmd_line.include?('"')
   fail "Command line cannot include double quotes (use single quotes instead). Found: #{@cmd_line}."
 end
+# Escape single quotes:
+# http://stackoverflow.com/questions/17632487/recommended-method-of-escaping-single-quotes-in-bash-double-quotes-backslashe
+
+effective_cmd_line = (
+  @cmd_line + ' ' + [
+    @out_file ? "> #{@out_file}" : nil,
+    @err_file ? "2> #{@err_file}" : nil
+  ].compact.join(' ')
+).strip
+
+escaped_cmd_line = effective_cmd_line.gsub("'", "'\\\\''")
 %>
 check process <%= @service_name.inspect %>
   matching <%= @cmd_line_pattern.inspect %>
   every 1 cycles
 
-  start program "/usr/bin/nohup <%= @cmd_line %><% if @out_file %> ><%= @out_file %> <% end %><% if @err_file %> 2><%= @err_file %><% end %>"
+  start program "/usr/bin/nohup bash -c 'exec <%= escaped_cmd_line %>'"
   <% if @user %> as uid <%= @user %> as gid <%= @group || @user %> <% end %>
 
   stop program "/usr/bin/pkill <% if @user %> -u <%= @user %> <% end %> -f '<%= @cmd_line_pattern %>'"

@@ -40,7 +40,6 @@ class MonitWrapperSpec < MiniTest::Chef::Spec
 
   include MonitWrapperSpecHelpers
 
-
   describe_recipe 'monit_wrapper_test::default' do
 
     it 'creates the myuser user' do
