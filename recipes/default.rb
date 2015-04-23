@@ -29,8 +29,8 @@ end
 include_recipe 'monit-ng'
 
 # Ensure monit daemon is running. This may not happen on its own on Docker.
-bash 'start-monit' do
-  code '/etc/init.d/monit start'
+service 'monit' do
+  action :start
 end
 
 chef_gem 'waitutil'

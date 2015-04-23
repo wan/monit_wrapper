@@ -34,7 +34,7 @@ check process <%= @service_name.inspect %>
   matching <%= @cmd_line_pattern.inspect %>
   every 1 cycles
 
-  start program "/usr/bin/nohup bash -c 'exec <%= escaped_cmd_line %>'"
+  start program "/bin/bash -c '<%= escaped_cmd_line %> </dev/null &'"
   <% if @user %> as uid <%= @user %> as gid <%= @group || @user %> <% end %>
 
   stop program "/usr/bin/pkill <% if @user %> -u <%= @user %> <% end %> -f '<%= @cmd_line_pattern %>'"
