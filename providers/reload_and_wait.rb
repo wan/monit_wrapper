@@ -25,8 +25,8 @@ action :reload_and_wait do
       require 'waitutil'
       WaitUtil.wait_for_condition(
         "#{new_resource.name} to show up in the output of 'monit status'",
-        delay_sec: 0.2,
-        timeout_sec: 30
+        delay_sec: 1,
+        timeout_sec: 120
       ) do
         p = shell_out("#{node['monit']['executable']} status")
         stdout_stderr_combined = "stdout:\n#{p.stdout}\nstderr:#{p.stderr}"

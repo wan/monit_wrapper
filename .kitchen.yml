@@ -12,9 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ---
-driver_plugin: vagrant
-
 driver:
+  name: vagrant
   customize:
     cpus: 1
     memory: 1024

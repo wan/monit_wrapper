@@ -30,6 +30,11 @@ class Chef
       def get_monit_summary
         p = shell_out("#{node['monit']['executable']} summary")
         unless p.exitstatus == 0
+          if p.stderr.include?("No such file or directory - #{node['monit']['executable']}")
+            Chef::Log.warn(
+              'Monit not installed -- assuming no Monit-controlled processes are running')
+            return {}
+          end
           Chef::Log.fatal("Command '#{p.command}' failed\n" +
                           "stdout:\n#{p.stdout}\nstderr:\n#{p.stderr}")
           raise
