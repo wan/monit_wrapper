@@ -29,7 +29,7 @@ directory '/var/log/myservice' do
 end
 
 monit_wrapper_monitor 'myservice' do
-  template_source 'pattern-based_service.monitrc.erb'
+  template_source 'pattern-based_service.conf.erb'
   template_cookbook 'monit_wrapper'
   variables cmd_line: "/bin/bash #{myservice_script}",
             cmd_line_pattern: "/bin/bash #{myservice_script}",
