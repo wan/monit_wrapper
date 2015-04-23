@@ -28,14 +28,15 @@ class Chef
       #   Example return value:
       #   `{ 'sshd' => 'Running', 'my-service' => 'Not monitored' }`.
       def get_monit_summary
+        monit_executable = node['monit']['executable']
+        unless File.exists?(monit_executable)
+          Chef::Log.warn("Monit is not installed at #{monit_executable} -- " \
+                         "assuming no Monit-controlled processes are running")
+          return {}
+        end
         p = shell_out("#{node['monit']['executable']} summary")
         unless p.exitstatus == 0
-          if p.stderr.include?("No such file or directory - #{node['monit']['executable']}")
-            Chef::Log.warn(
-              'Monit not installed -- assuming no Monit-controlled processes are running')
-            return {}
-          end
-          Chef::Log.fatal("Command '#{p.command}' failed\n" +
+          Chef::Log.fatal("Command '#{p.command}' failed with exit status #{p.exitstatus}\n" +
                           "stdout:\n#{p.stdout}\nstderr:\n#{p.stderr}")
           raise
         end
