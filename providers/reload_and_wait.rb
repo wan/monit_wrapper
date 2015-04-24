@@ -19,7 +19,7 @@ action :reload_and_wait do
   script 'monit-reload' do
     interpreter 'bash'
     user 'root'
-    code 'monit reload'
+    code "#{node['monit']['executable']} reload"
   end
 
   ruby_block "wait-for-monit-reload-#{new_resource.name}" do
