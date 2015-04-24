@@ -16,14 +16,21 @@ include Chef::MonitWrapper::StartStop
 
 # Reload Monit configuration and wait for it to become aware of the given service.
 action :reload_and_wait do
+  service_name = new_resource.name
   script 'monit-reload' do
     interpreter 'bash'
     user 'root'
     code "#{node['monit']['executable']} reload"
   end
 
+  # The Monit daemon suddenly stops after the above reload action in some cases. We are working
+  # around that bug by restarting the Monit daemon here.
+  ruby_block "ensure-monit-is-running-after-reloading-for-#{service_name}" do
+    block { ensure_monit_daemon_is_running }
+  end
+
   ruby_block "wait-for-monit-reload-#{new_resource.name}" do
-    block { reload_monit_and_wait_for_service(new_resource.name) }
+    block { wait_for_monit_service_to_exist(new_resource.name) }
   end
 
   new_resource.updated_by_last_action(true)

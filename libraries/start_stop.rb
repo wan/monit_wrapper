@@ -100,7 +100,19 @@ class Chef
         end
       end
 
-      def reload_monit_and_wait_for_service(service_name)
+      # Ensure the Monit daemon is running.
+      def ensure_monit_daemon_is_running
+        Chef::Log.info('Ensuring the Monit service is running')
+        result = shell_out('service monit start')
+        if result.exitstatus != 0 && !result.stderr.include?('start: Job is already running: monit')
+          fail "Failed to start Monit. stdout:\n#{result.stdout}\nstderr:\n#{result.stderr}"
+        end
+      end
+
+      # Wait for the given service to be recognized as a Monit service. This is determined by
+      # checking whether the output of the `monit status` command includes the given service name.
+      # @param service_name [String] service name
+      def wait_for_monit_service_to_exist(service_name)
         require 'waitutil'
         WaitUtil.wait_for_condition(
           "#{service_name} to show up in the output of 'monit status'",
@@ -127,3 +139,6 @@ class Chef
     end
   end
 end
+
+Chef::Resource::RubyBlock.send(:include, Chef::MonitWrapper::StartStop)
+Chef::Provider::RubyBlock.send(:include, Chef::MonitWrapper::StartStop)

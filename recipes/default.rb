@@ -32,12 +32,7 @@ include_recipe 'monit-ng'
 # "service" resource, because service[monit] is also defined in monit-ng, and we do not want to
 # interfere with that resource's execution here.
 ruby_block 'monit_wrapper_start_monit_service' do
-  block do
-    result = shell_out('service monit start')
-    if result.exitstatus != 0 && !result.stderr.include?('start: Job is already running: monit')
-      fail "Failed to start Monit. stdout:\n#{result.stdout}\nstderr:\n#{result.stderr}"
-    end
-  end
+  block { ensure_monit_daemon_is_running }
 end
 
 chef_gem 'waitutil'
