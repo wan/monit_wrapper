@@ -18,18 +18,22 @@
 if @cmd_line.include?('"')
   fail "Command line cannot include double quotes (use single quotes instead). Found: #{@cmd_line}."
 end
-# Escape single quotes:
-# http://stackoverflow.com/questions/17632487/recommended-method-of-escaping-single-quotes-in-bash-double-quotes-backslashe
+
+redirection = @append ? '>>' : '>'
 
 effective_cmd_line = (
   @cmd_line + ' ' + [
-    @out_file ? "> #{@out_file}" : nil,
-    @err_file ? "2> #{@err_file}" : nil
+    @out_file ? "#{redirection} #{@out_file}" : nil,
+    @err_file ? "2#{redirection} #{@err_file}" : nil
   ].compact.join(' ')
 ).strip
 
+# Escape single quotes:
+# http://stackoverflow.com/questions/17632487/recommended-method-of-escaping-single-quotes-in-bash-double-quotes-backslashe
 escaped_cmd_line = effective_cmd_line.gsub("'", "'\\\\''")
+escaped_cmd_line_pattern = @cmd_line_pattern.gsub("'", "'\\\\''")
 %>
+
 check process <%= @service_name.inspect %>
   matching <%= @cmd_line_pattern.inspect %>
   every 1 cycles
@@ -37,5 +41,6 @@ check process <%= @service_name.inspect %>
   start program "/bin/bash -c '<%= escaped_cmd_line %> </dev/null &'"
   <% if @user %> as uid <%= @user %> as gid <%= @group || @user %> <% end %>
 
-  stop program "/usr/bin/pkill <% if @user %> -u <%= @user %> <% end %> -f '<%= @cmd_line_pattern %>'"
+  stop program "/usr/bin/pkill <% if @user %> -u <%= @user %> <% end %> -f '<%=
+    escaped_cmd_line_pattern %>'"
   <% if @user %> as uid <%= @user %> as gid <%= @group || @user %> <% end %>
