@@ -12,4 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_attribute 'monit-ng'
+
 default['monit_wrapper']['start_stop_timeout_sec'] = 10
