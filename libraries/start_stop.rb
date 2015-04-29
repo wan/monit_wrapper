@@ -122,7 +122,9 @@ class Chef
           p = shell_out("#{node['monit']['executable']} status")
           stdout_stderr_combined = "stdout:\n#{p.stdout}\nstderr:#{p.stderr}"
           if p.stderr.include?('Status not available -- the monit daemon is not running')
-            # Monit is probably still starting up. Wait a bit longer.
+            # Monit might have crashed on the "monit reload" command. Restart it as a temporary
+            # workaround.
+            ensure_monit_daemon_is_running
             [false, stdout_stderr_combined]
           else
             if p.exitstatus != 0
