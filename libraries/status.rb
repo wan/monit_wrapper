@@ -109,9 +109,12 @@ class Chef
       # @return [Boolean] `true` if the given service status is considered "stable".
       def monit_status_stable?(status)
         !status.nil? &&
-          status != 'Initializing' &&
           status !~ / pending$/ &&
-          status != 'Does not exist'
+          ![
+            'Does not exist',
+            'Initializing',
+            'PPID changed'
+          ].include?(status)
       end
 
       # Parses the output of the `monit summary` command and returns it in the form of a hash
