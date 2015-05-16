@@ -5,5 +5,5 @@ bundle install
 bundle exec rspec
 git pull --rebase origin master
 git push origin master
-bundle exec stove
+bundle exec stove "$@"
 ./publish_docs.sh
