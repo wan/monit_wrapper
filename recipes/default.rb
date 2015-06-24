@@ -56,7 +56,7 @@ end
 # We use this directory for lock files to ensure that no more than one process is trying to
 # start/stop a particular service from start_stop_service_from_monit.sh at any given moment.
 directory '/var/monit' do
-  owner' root'
+  owner 'root'
   group 'root'
   mode '0777'
 end
