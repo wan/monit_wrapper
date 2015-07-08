@@ -21,7 +21,7 @@ class Chef
       include Chef::Mixin::ShellOut
       include Chef::MonitWrapper::Status
 
-      DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC = 60
+      DEFAULT_MONIT_SERVICE_HOST_PORT_TIMEOUT_SEC ||= 60
 
       # Starts the given Monit service. Waits for the service status to stabilize before and after
       # issuing the start command. If a host/port combination is specified, waits for the given host
