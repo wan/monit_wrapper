@@ -15,7 +15,7 @@
       <script type="text/javascript" charset="utf-8" src="js/full_list.js"></script>
     
 
-    <title>Resource List</title>
+    <title>Cookbooks List</title>
     <base id="base_target" target="_parent" />
   </head>
   <body>
@@ -30,7 +30,7 @@
       }
     </script>
     <div id="content">
-      <h1 id="full_list_header">Resource List</h1>
+      <h1 id="full_list_header">Cookbooks List</h1>
       <div id="nav">
         
           <span><a target="_self" href="cookbooks_list.html">
@@ -56,49 +56,18 @@
       </div>
       <div id="search">Search: <input type="text" /></div>
 
-      <ul id="full_list" class="resources">
+      <ul id="full_list" class="cookbooks">
         
 
 
 
-  
-    
-      <li class="r1">
-        <span class="object_link">
-          <a href="chef/monit_wrapper.html#Chef%3A%3AResource%3A%3AMonitWrapperMonitor" title="resources/monitor.rb">
-            monit_wrapper_monitor
-          </a>
-        </span>
-      </li>
-      
-    
-      <li class="r2">
-        <span class="object_link">
-          <a href="chef/monit_wrapper.html#Chef%3A%3AResource%3A%3AMonitWrapperService" title="resources/service.rb">
-            monit_wrapper_service
-          </a>
-        </span>
-      </li>
-      
-    
-      <li class="r1">
-        <span class="object_link">
-          <a href="chef/monit_wrapper.html#Chef%3A%3AResource%3A%3AMonitWrapperReloadAndWait" title="resources/reload_and_wait.rb">
-            monit_wrapper_reload_and_wait
-          </a>
-        </span>
-      </li>
-      
-    
-      <li class="r2">
-        <span class="object_link">
-          <a href="chef/monit_wrapper.html#Chef%3A%3AResource%3A%3AMonitWrapperNotifyIfNotRunning" title="resources/notify_if_not_running.rb">
-            monit_wrapper_notify_if_not_running
-          </a>
-        </span>
-      </li>
-      
-    
+  <li class="r1">
+    <span class="object_link">
+      <a href="chef/monit_wrapper.html" title="metadata.rb">
+        monit_wrapper
+      </a>
+    </span>
+  </li>
   
 
 
