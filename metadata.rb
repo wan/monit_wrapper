@@ -18,13 +18,13 @@ maintainer_email 'mbautin@clearstorydata.com'
 license          'Apache License 2.0'
 description      'A wrapper around Monit making it easier to monitor services'
 version          '3.3.0'
-source_url       'https://github.com/clearstorydata-cookbooks/monit_wrapper'
-issues_url       'https://github.com/clearstorydata-cookbooks/monit_wrapper/issues'
+source_url       'https://github.com/clearstorydata-cookbooks/monit_wrapper' if respond_to?(:source_url)
+issues_url       'https://github.com/clearstorydata-cookbooks/monit_wrapper/issues' if respond_to?(:issues_url)
 
 %w( debian ubuntu redhat centos fedora ).each do |os|
   supports os
 end
 
 depends 'apt'
-depends 'monit-ng'
+depends 'monit-ng', '~> 2.1.0'
 depends 'notifying-action', '~> 1.0.1'
